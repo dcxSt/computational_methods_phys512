@@ -2,7 +2,7 @@ Due Friday Sep 16 at 11:59PM
 
 ## Problem 1, Taking a derivative
 
-
+[solution1_stephenfay.pdf](https://github.com/dcxSt/computational_methods_phys512/files/9543776/solution1_stephenfay.pdf)
 
 ## Problem 2, Write a numerical differentiator prototype
 ```python
