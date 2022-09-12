@@ -25,8 +25,66 @@ def ndiff(f, x, full=False):
 
 
 # Problem 3, lakeshore diodes
-def interp3(x,y):
-    """Returns a function that interpolates between x and y"""
+def indicator(x1,x2):
+    """Returns the indicator function Chi = 1 on [x1,x2)
+
+    x1 : float
+    x2 : float
+    """
+    def f(x):
+        # Handle integers and floats
+        if type(x) in (type(0.0),type(0)):
+            if x>=x1 and x<x2: return 1.0
+            else: return 0.0
+        # Otherwise it's an ndarray
+        out = np.zeros(x.shape)
+        out[np.where(np.logical_and(x>=x1,x<x2))] = 1.0
+        return out
+    return f
+
+def interp_linear(x,y):
+    """Returns a linear interpolation function
+
+    Demonstrates use of indicator functions. 
+
+    Returns
+    -------
+    function
+        Interpolation function that takes float, ints
+        or ndarray and returns float or arrays.
+    """
+    assert x.shape == y.shape and len(x.shape) == 1
+    def fun(xx):
+        # Handle array and (float or int) input
+        out = np.zeros(xx.shape) if type(xx)==np.ndarray else 0.0
+        for x1,y1,x2,y2 in zip(x[:-1],y[:-1],x[1:],y[1:]):
+            a = (y2-y1)/(x2-x1) # Slope between two points
+            b = y1 - x1*a # Constant factor
+            out += indicator(x1,x2)(xx) * (a*xx + b)
+        return out
+    return fun
+
+            
+def interp_cubic_spline(x,y):
+    """Returns a function evaluates between x and y
+
+    Parameters
+    ----------
+    x : ndarray
+        The domain, x points
+    y : ndarray
+        The image of our function at the points x
+
+    Returns
+    -------
+    function
+        A cubic spline interpolation. 
+    """
+
+    # def cubic_spline()
+    # 
+    # return cubic_spline
+    return 
 
 
 # Interp 3d for a single point

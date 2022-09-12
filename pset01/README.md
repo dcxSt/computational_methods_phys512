@@ -24,6 +24,11 @@ def ndiff(f, x, full=False):
 
 
 ## Problem 4, Interpolation
+Take `cos(x)` between `-pi` and `pi`. Compare the accuracy of polynomial, cubic spline, and rational function interpolation given some modest number of points, but for fairness each method should use the same points. Now try using a Lorentzian `1/(1+x*x)` between `-1` and `1`. 
+
+
+
+What should the error be for the Lorentzian from the rational function fit? Does what you got agree with the expectations when the order is higher (say `n=4, m=5`)? What happens if you switch from `np.linalg.inv` to `np.linalg.pinv` (which tries to deal with singular matrices)? Can you understand what has happend by looking at `p` and `q`? As a hint, think about why we had to fix the constant term in the denominator, and how that might generalize. 
 
 
 
