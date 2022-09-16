@@ -91,8 +91,14 @@ dvdt=dat[:,2]*0.001 # Normalize to correct units
 ```
 
 ## Problem 4, Interpolation
-Take `cos(x)` between `-pi` and `pi`. Compare the accuracy of polynomial, cubic spline, and rational function interpolation given some modest number of points, but for fairness each method should use the same points. Now try using a Lorentzian `1/(1+x*x)` between `-1` and `1`. 
+*Take `cos(x)` between `-pi` and `pi`. Compare the accuracy of polynomial, cubic spline, and rational function interpolation given some modest number of points, but for fairness each method should use the same points. Now try using a Lorentzian `1/(1+x*x)` between `-1` and `1`.* 
 
+![fits4_n=3_m=2](https://user-images.githubusercontent.com/21654151/190714060-62cbb28b-8669-45b4-b201-de5501a16435.png)
+![fits4_n=3_m=3](https://user-images.githubusercontent.com/21654151/190714062-833b21da-7837-45a1-8b76-ea2ff08c3dd9.png)
+![fits4_n=6_m=5](https://user-images.githubusercontent.com/21654151/190714063-07449d00-c6bd-4a82-84ba-f7388afccddf.png)
+![fits4_n=7_m=8](https://user-images.githubusercontent.com/21654151/190714065-28d064b1-623d-4a2b-9c04-5fe1992efdd1.png)
+![fits4_n=9_m=8](https://user-images.githubusercontent.com/21654151/190714066-cac80bb7-0812-4204-8f68-e61965e83ee6.png)
+![fits4_n=12_m=11](https://user-images.githubusercontent.com/21654151/190714067-c2775059-a602-4bc9-8dce-73d7b78eff12.png)
 
 
 *What should the error be for the Lorentzian from the rational function fit? Does what you got agree with the expectations when the order is higher (say `n=4, m=5`)? What happens if you switch from `np.linalg.inv` to `np.linalg.pinv` (which tries to deal with singular matrices)? Can you understand what has happend by looking at `p` and `q`? As a hint, think about why we had to fix the constant term in the denominator, and how that might generalize.* 
