@@ -22,7 +22,7 @@ def ndiff(f, x, full=False):
 
 We interpolate with a cubic spline, only using the nearest two data points, and taking advantage of the fact we are given the derivatives.
 
-[lakeshore_spline_with_derivatives.pdf](https://github.com/dcxSt/computational_methods_phys512/files/9586454/lakeshore_spline_with_derivatives.pdf)
+![lakeshore_spline_with_derivative](https://user-images.githubusercontent.com/21654151/190710120-34775a0f-dcca-4c26-aceb-3aa7c1468f20.png)
 
 
 ```python
