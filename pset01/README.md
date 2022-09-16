@@ -78,6 +78,16 @@ def interp_cubic(v,volt,temp,dvdt):
 
 ![cubic_lakeshore](https://user-images.githubusercontent.com/21654151/190709724-b7ba350b-9420-4405-8dd3-cc6ff91d1149.png)
 
+We have to be careful to normalize before calling the interpolation function. If testing code above, see `cubic_lakeshore.py` in this directory. 
+
+```python
+dat=np.loadtxt("lakeshore.txt")
+dat=dat[dat[:,1].argsort()] # Sort ascending volt
+temp=dat[:,0]
+volt=dat[:,1]
+dvdt=dat[:,2]*0.001 # Normalize to correct units
+```
+
 ## Problem 4, Interpolation
 Take `cos(x)` between `-pi` and `pi`. Compare the accuracy of polynomial, cubic spline, and rational function interpolation given some modest number of points, but for fairness each method should use the same points. Now try using a Lorentzian `1/(1+x*x)` between `-1` and `1`. 
 

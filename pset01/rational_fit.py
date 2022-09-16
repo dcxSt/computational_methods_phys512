@@ -8,10 +8,8 @@ def rational(coeffs,x,n=n,m=m):
 
     x : ndarray or float/int
         Data to evaluate.
-
     n : int
         Order of numerator polynomial.
-
     m : int
         Order of denomenator polynomial.
     """
@@ -27,14 +25,13 @@ def polynomial(coeffs,x):
     
     coeffs : ndarray
         The ordered coefficients of the polynomial, from x^0 up.
-
     x : ndarray or float/int
         Data to evaluate
 
     Returns
     -------
     ndarray or float/int
-        p(x) = 
+        p(x) = dot(coeffs,x)
     """
     ord=coeffs.shape[0]-1 # -1 ugly but necessary for consistancy
     y=np.vstack([x**k for k in range(ord+1)]).T@coeffs

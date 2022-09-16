@@ -25,7 +25,9 @@ def ndiff(f, x, full=False):
 
 
 # Problem 3, lakeshore diodes
-def indicator(x1,x2):
+### BEGIN: Tried & failed to write my own cubic spline 3
+# This function works
+def get_indicator(x1,x2):
     """Returns the indicator function Chi = 1 on [x1,x2)
 
     x1 : float
@@ -42,6 +44,7 @@ def indicator(x1,x2):
         return out
     return f
 
+# This function works
 def interp_linear(x,y):
     """Returns a linear interpolation function
 
@@ -60,11 +63,11 @@ def interp_linear(x,y):
         for x1,y1,x2,y2 in zip(x[:-1],y[:-1],x[1:],y[1:]):
             a = (y2-y1)/(x2-x1) # Slope between two points
             b = y1 - x1*a # Constant factor
-            out += indicator(x1,x2)(xx) * (a*xx + b)
+            out += get_indicator(x1,x2)(xx) * (a*xx + b)
         return out
     return fun
 
-            
+# This function doesn't work!
 def interp_cubic_spline(x,y):
     """Returns a function evaluates between x and y
 
@@ -80,11 +83,38 @@ def interp_cubic_spline(x,y):
     function
         A cubic spline interpolation. 
     """
+    spline_params=[] # list of functions on segments
+    indicators=[] # list of indicator functions 
+    yip=(y[1]-y[0])/(x[1]-x[0]) # First derivative at x[i]
+    yipp=0.0 # Second derivative of y at x[i]
+    for x1,y1,x2,y2 in zip(x[:-1],y[:-1],x[1:],y[1:]):
+        dx=x2-x1 # centor x a x1
+        rdx=1/dx
+        d=y1 # constant term
+        c=yip # First derivative
+        b=0.5*yipp # Second derivative
+        a=rdx**3*y2-rdx*b-rdx**2*c-rdx**3*d
+        # def spline_segment(x):
+        #     xs=x-x1 # shift x
+        #     return a*xs**3+b*xs**2+c*xs+d
+        # Compute derivatives for the next round
+        yip=3*a*dx**2+2*b*dx+c
+        yipp=6*a*dx+2*b
+        # Add spline params to list
+        spline_params.append((a,b,c,d,x1,rdx))
+        indicators.append(get_indicator(x1,x2))
 
-    # def cubic_spline()
-    # 
-    # return cubic_spline
-    return 
+    # Construct the Cubic spline
+    def cubic_spline(xx):
+        out=np.zeros(xx.shape) if type(xx)==np.array else 0.0       
+        # set ypp and y initial conditions
+        for indicator,(a,b,c,d,x1,rdx) in zip(indicators,spline_params):
+            xs = xx-x1 # Shift x by x1
+            out += indicator(xx)*a*xs**3+b*xs**2+c*xs+d
+            # out += spline(xx)*indicator(xx)
+        return out
+    
+    return cubic_spline
 
 
 # Interp 3d for a single point
@@ -97,18 +127,40 @@ def lakeshore(V, data):
     
 
 if __name__ == "__main__":
-    print("INFO: testing ndiff")
+    import matplotlib.pyplot as plt
+
+    print("DEBUG: testing ndiff")
     x = np.linspace(-50,10,5) # 10**(np.linspace(-5,1,7))
     dfdx, dx, err = ndiff(np.exp, x, True)
-    print(f"INFO: x = {x}")
-    print(f"INFO: d exp(x)/dx = {dfdx}")
-    print(f"INFO: numerical - analytic = {np.exp(x)-dfdx}")
-    print(f"INFO: estimated error = {err}")
+    print(f"DEBUG: x = {x}")
+    print(f"DEBUG: d exp(x)/dx = {dfdx}")
+    print(f"DEBUG: numerical - analytic = {np.exp(x)-dfdx}")
+    print(f"DEBUG: estimated error = {err}")
 
-    print("\nINFO: testing lakeshore")
+    print("\nDEBUG: testing lakeshore")
     dat = np.loadtxt("lakeshore.txt")
     v = np.linspace(1,500,29)
     lakeshore(v, dat)
+
+    print("\nDEBUG: testing cubic spline")
+    fun=np.cos
+    x=np.linspace(-2*np.pi,2*np.pi,6)
+    y=fun(x)
+    # Get the cubic spline
+    spline=interp_cubic_spline(x,y)
+    xfine=np.linspace(-2*np.pi,2*np.pi,1000)
+    yspline=spline(xfine)
+    print(f"DEBUG: {yspline}")
+    ytrue=fun(xfine)
+    plt.figure()
+    plt.plot(x,y,"o", label="samples interpolated")
+    plt.plot(xfine,ytrue,label="true")
+    plt.plot(xfine,yspline,label="spline")
+    plt.legend()
+    plt.show(block=True)
+
+
+
 
 
 

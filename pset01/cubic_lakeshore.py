@@ -24,7 +24,7 @@ def interp_cubic(v,volt,temp,dvdt):
         t1=temp[idx1]
         t2=temp[idx2]
         tp1=1/dvdt[idx1]
-        tp2=1/volt[idx2]
+        tp2=1/dvdt[idx2]
         dv=v2-v1
         # These numbers come from the pretty derivation, see paper
         mat=np.array([[dv**2/2 , dv**3/6],
@@ -43,7 +43,7 @@ def interp_cubic(v,volt,temp,dvdt):
     tfit_arr,logerr_arr=[],[]
     for i,val in enumerate(v):
         print(f"DEBUG: i={i}, v={v}")
-        tfit,logerr = interp(val,volt,temp,dvdt)
+        tfit,logerr = interp_cubic(val,volt,temp,dvdt)
         tfit_arr.append(tfit)
         logerr_arr.append(logerr)
     print("DEBUG: returning")
@@ -52,31 +52,31 @@ def interp_cubic(v,volt,temp,dvdt):
        
 
 
-
 if __name__=="__main__":
     dat=np.loadtxt("lakeshore.txt")
     dat=dat[dat[:, 1].argsort()] # Sort ascending volt
     print(f"DEBUG: dat.shape={dat.shape}")
     temp=dat[:,0]
     volt=dat[:,1]
-    dvdt=dat[:,2]
+    dvdt=dat[:,2]*0.001 # Normalize units
 
     print("DEBUG: check1")
-    voltfine=np.linspace(volt[1],volt[-2],101)
-    tempinterp,logerr=interp(voltfine,volt,temp,dvdt)
+    voltfine=np.linspace(volt[1],volt[-2],1001)
+    tempinterp,logerr=interp_cubic(voltfine,volt,temp,dvdt)
     
     print("DEBUG: check2")
     tempinterp=np.array(tempinterp)
-    logerr=np.array(err).mean()
+    logerr=np.max(np.array(logerr))
 
     import matplotlib.pyplot as plt
     plt.figure()
-    plt.title("Cubic interpolation")
+    plt.title("Cubic interpolation using two points\nand the derivatives at those points")
     plt.plot(volt,temp,"o",label="values given")
-    plt.plot(voltfine,tempinterp,label=f"interpolation logerr={logerr}")
+    plt.plot(voltfine,tempinterp,label=f"interpolation logerr estimate: {logerr}")
     plt.legend()
     plt.xlabel("V")
     plt.ylabel("T")
+    plt.savefig("plots/cubic_lakeshore.png")
     plt.show(block=True)
 
 
