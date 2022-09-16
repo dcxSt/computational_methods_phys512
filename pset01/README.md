@@ -22,6 +22,9 @@ def ndiff(f, x, full=False):
 
 We interpolate with a cubic spline, only using the nearest two data points, and taking advantage of the fact we are given the derivatives.
 
+[lakeshore_spline_with_derivatives.pdf](https://github.com/dcxSt/computational_methods_phys512/files/9586454/lakeshore_spline_with_derivatives.pdf)
+
+
 ```python
 def interp_cubic(v,volt,temp,dvdt):
     """Interpolate the temp as function of volt, evaluate on v
@@ -73,8 +76,7 @@ def interp_cubic(v,volt,temp,dvdt):
     return tfit_arr,logerr_arr
 ```
 
-
-
+![cubic_lakeshore](https://user-images.githubusercontent.com/21654151/190709724-b7ba350b-9420-4405-8dd3-cc6ff91d1149.png)
 
 ## Problem 4, Interpolation
 Take `cos(x)` between `-pi` and `pi`. Compare the accuracy of polynomial, cubic spline, and rational function interpolation given some modest number of points, but for fairness each method should use the same points. Now try using a Lorentzian `1/(1+x*x)` between `-1` and `1`. 
