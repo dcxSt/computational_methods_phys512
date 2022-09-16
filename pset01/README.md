@@ -198,6 +198,10 @@ Here are plots of how each of these methods performs on the cosine function.
 
 Here are plots of how each of these methods performs on the laplacian, provided we use `np.linalg.pinv` rather than `np.linalg.inv` to invert our degenerate matrices. 
 
+![fits4_laplacian_n=2_m=3](https://user-images.githubusercontent.com/21654151/190715851-aee684fa-9242-4abc-927c-44f7262b399f.png)
+![fits4_laplacian_n=3_m=3](https://user-images.githubusercontent.com/21654151/190715852-52418823-a4f4-463d-b96f-79b2ec521c0d.png)
+![fits4_laplacian_n=6_m=6](https://user-images.githubusercontent.com/21654151/190715854-ac0ff864-a788-4f4d-8a95-a3c10feb1d59.png)
+![fits4_laplacian_n=7_m=8](https://user-images.githubusercontent.com/21654151/190715856-64e7890d-f5e5-443d-85e0-deeaa2c5dc83.png)
 
 
 *What should the error be for the Lorentzian from the rational function fit? Does what you got agree with the expectations when the order is higher (say `n=4, m=5`)? What happens if you switch from `np.linalg.inv` to `np.linalg.pinv` (which tries to deal with singular matrices)? Can you understand what has happend by looking at `p` and `q`? As a hint, think about why we had to fix the constant term in the denominator, and how that might generalize.* 
