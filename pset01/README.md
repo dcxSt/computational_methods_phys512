@@ -22,7 +22,7 @@ def ndiff(f, x, full=False):
 
 We interpolate with a cubic spline, only using the nearest two data points, and taking advantage of the fact we are given the derivatives.
 
-```
+```python
 def interp_cubic(v,volt,temp,dvdt):
     """Interpolate the temp as function of volt, evaluate on v
 
