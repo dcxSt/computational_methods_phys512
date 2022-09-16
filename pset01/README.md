@@ -76,6 +76,8 @@ def interp_cubic(v,volt,temp,dvdt):
     return tfit_arr,logerr_arr
 ```
 
+As indicated in the comments in the code above, we estimate the ballpark error by taking the max of the trunkation error and the system error. 
+
 ![cubic_lakeshore](https://user-images.githubusercontent.com/21654151/190709724-b7ba350b-9420-4405-8dd3-cc6ff91d1149.png)
 
 We have to be careful to normalize before calling the interpolation function. If testing code above, see `cubic_lakeshore.py` in this directory. 

@@ -66,7 +66,7 @@ if __name__=="__main__":
     
     print("DEBUG: check2")
     tempinterp=np.array(tempinterp)
-    logerr=np.max(np.array(logerr))
+    logerr=np.median(np.array(logerr))
 
     import matplotlib.pyplot as plt
     plt.figure()
