@@ -95,11 +95,11 @@ if __name__ == "__main__":
     import matplotlib.pyplot as plt
 
     # The function we are fitting
-    fun=np.cos
-    funcname="cos" # This is for the plot
+    fun=lambda x:1/(1+x**2) # Laplacian # fun=np.cos
+    funcname="laplacian" # This is for the plot
     
     # Rational function order of numer and denom polynomials
-    n,m=7,8
+    n,m=6,6
     ord=n+m-2 # Order of polynomial fit
     # Number of degrees of freedom / number of coeffs to fit is ord+1
     
@@ -129,7 +129,7 @@ if __name__ == "__main__":
     # Plot data and fits
     plt.subplot(1,2,1)
     plt.plot(xfine,y_rational,label=f"best fit rational n={n},m={m}")
-    plt.plot(xfine,y_poly,label="best fit polynomial")
+    plt.plot(xfine,y_poly,label=f"best fit polynomial, order={ord}")
     plt.plot(xfine,y_cubic_interp,label="cubic interpolation")
     plt.plot(xfine,y_true,"--",label="truth")
     plt.plot(x,y,"o",label="sample points")
@@ -148,7 +148,7 @@ if __name__ == "__main__":
     plt.title("Residuals")
     # Formatting stuff
     plt.tight_layout()
-    plt.savefig(f"plots/fits4_n={n}_m={m}.png")
+    plt.savefig(f"plots/fits4_laplacian_n={n}_m={m}.png")
     plt.show(block=True)
     
 
