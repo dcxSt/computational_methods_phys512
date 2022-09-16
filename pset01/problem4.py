@@ -1,6 +1,7 @@
 import numpy as np
+from scipy.interpolate import interp1d
 
-def rational(coeffs,x,n=n,m=m):
+def rational(coeffs,x,n:int,m:int):
     """Evaluates the rational function p(x)/(1+qq(x))
 
     coeffs : ndarray
@@ -89,6 +90,7 @@ def polynomial_fit(x:np.ndarray, y:np.ndarray, ord:int):
     return coeffs
 
 
+
 if __name__ == "__main__":
     import matplotlib.pyplot as plt
 
@@ -97,7 +99,7 @@ if __name__ == "__main__":
     funcname="cos" # This is for the plot
     
     # Rational function order of numer and denom polynomials
-    n,m=6,5
+    n,m=7,8
     ord=n+m-2 # Order of polynomial fit
     # Number of degrees of freedom / number of coeffs to fit is ord+1
     
@@ -111,36 +113,42 @@ if __name__ == "__main__":
     print(f"DEBUG: Rational coeffs denomenator {coeffs_rational[n:]}")
     # Fit a polynomial function
     coeffs_poly=polynomial_fit(x,y,ord)
+    # Fit a cubic spline
+    cubic_interp=interp1d(x,y,kind="cubic")
     
     # Sample finer resolution for evaluating the fits
-    xfine=np.linspace(-np.pi/2,np.pi/2,1000)
+    xfine=np.linspace(-np.pi/2,np.pi/2,1001)
     # Use rational fit to eval, and get y_true for baseline
     y_rational=rational(coeffs_rational,xfine,n,m)
     y_poly=polynomial(coeffs_poly,xfine)
+    y_cubic_interp=cubic_interp(xfine)
     y_true=fun(xfine)
     
     ### Plots 
     plt.subplots(1,2,figsize=(8,4))
     # Plot data and fits
     plt.subplot(1,2,1)
-    plt.plot(x,y,"o",label="sample points")
-    plt.plot(xfine,y_rational,label="best fit rational")
+    plt.plot(xfine,y_rational,label=f"best fit rational n={n},m={m}")
     plt.plot(xfine,y_poly,label="best fit polynomial")
-    plt.plot(xfine,ytrue,"--",label="truth")
+    plt.plot(xfine,y_cubic_interp,label="cubic interpolation")
+    plt.plot(xfine,y_true,"--",label="truth")
+    plt.plot(x,y,"o",label="sample points")
     plt.legend()
     plt.xlabel("x")
     plt.ylabel(f"{funcname}(x)")
     plt.title(f"{funcname}--fits and data")
     # Residuals
     plt.subplot(1,2,2)
-    plt.plot(xfine,y_rational-ytrue,label="y_rational-ytrue")
-    plt.plot(xfine,y_poly-ytrue,label="y_poly-ytrue")
+    plt.plot(xfine,y_rational-y_true,label="y_rational-y_true")
+    plt.plot(xfine,y_poly-y_true,label="y_poly-y_true")
+    plt.plot(xfine,y_cubic_interp-y_true,label="y_cubic_interp-y_true")
     plt.legend()
     plt.xlabel("x")
     plt.ylabel("Residuals")
     plt.title("Residuals")
     # Formatting stuff
     plt.tight_layout()
+    plt.savefig(f"plots/fits4_n={n}_m={m}.png")
     plt.show(block=True)
     
 
