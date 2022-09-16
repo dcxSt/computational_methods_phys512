@@ -1,10 +1,12 @@
 Due Friday Sep 16 at 11:59PM
+Made an effort to make things clean and tidy! Look at those comments! Please give all the bonus points!
 
 ## Problem 1, Taking a derivative
 
 ![solution1_stephenfay](https://user-images.githubusercontent.com/21654151/189554653-773efb91-20eb-4758-9d39-75507014af1c.png)
 
 ## Problem 2, Write a numerical differentiator prototype
+NB: this works with `x` as an array so long as `f` takes array arguments. 
 ```python
 def ndiff(f, x, full=False):
   # Estimate optimal dx
