@@ -141,6 +141,42 @@ The above code was tested and it generates the same plots as in problem 1. To se
 
 # Problem 3
 
+## a)
+
+*Write a function that models the log base 2 of x valid from 0.5 to 1 to an accuracy in the region better than 10−6. Please use a truncated Chebyshev polynomial fit to do this - you can use np.polynomial.chebyshev.chebfit. How many terms do you need? You should use many x/y values and fit to some high order, then only keep the terms you think you’ll need and drop the rest. Make sure also that you rescale the x-range you use to go from -1 to 1 before calling chebfit.*
+
+```python
+# Perpare data to fit
+x=np.linspace(0.5,1,1001)
+y=log2(x)
+xscale=x*4-3 # Scale x between -1 and 1
+# Fit a chebyshev polynomial
+degree=7
+cheb_coeffs=chebfit(xscale,y,deg=degree)
+# Scale the fit so that it's in the right range
+def fastlog2(x):
+    return chebval(x*4-3,cheb_coeffs)
+# Make sure the error is okay by plotting residuals
+xfine=np.linspace(0.5,1,10001)
+res=fastlog2(xfine)-log2(xfine)
+```
+
+*Once you have the Chebyshev expansion for 0.5 to 1, write a routine called
+mylog2 that will take the natural log of any positive number. Hint - you will want to use the routine np.frexp for this, which breaks up a floating point number into its mantissa and exponent. Also feel free to use np.polynomial.chebyshev.chebval to evaluate your fit. You might ask yourself if a computer ever takes a natural log directly, or if it goes through the log base 2 (near as I can tell, it’s the log base 2).*
+
+The natural log of a number `ln(x)` is just `ln(2)*log2(x)`. To compute the log base two of `x`, we split it into it's mantissa and it's exponant, then sum the log of it's mantissa with it's exponant. The Mantissa will always be between 0.5 and 1, so we can use our cheb fit!
+
+```python
+"""Part a), get the log of any positive number."""
+def mylog2(x):
+    mantissa,exponant=np.frexp(x)
+    # For positive numbers, the mantissa will never be less than 0.5
+    return fastlog2(mantissa) + exponant
+
+def myln(x):
+    return np.log(2) * mylog2(x)
+```
+This agrees quite well with numpy log. Residuals:
 
 
 
