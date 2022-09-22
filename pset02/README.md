@@ -178,7 +178,7 @@ def myln(x):
 ```
 This agrees quite well with numpy log. Residuals:
 
-
+![residuals_problem3](https://user-images.githubusercontent.com/21654151/191844696-59b3a774-de72-4d1d-a46e-7504c344ffe9.png)
 
 
 
