@@ -40,6 +40,8 @@ def rk4_stepd(fun,x:float,y:float,h:float):
 
 Since our `rk4` integrator requires 4 function evaluations, we need to make `4 + 2*4 = 12` in total. Four for `h`, then another eight for `h/2` for `h/2`.
 
+![integrated_plots](https://user-images.githubusercontent.com/21654151/193368230-8837df3e-c98d-4dca-ae87-6e117dd9dd69.png)
+
 **Bonus:** I used an RK4 integrator to solve [this](https://editor.p5js.org/dcxSt/sketches/VyBm8dgZ_) toy newtonian five body system planitary in P5 JS. You can play around with it by adding masses with `Mass(x,y,vx,vy,mass)` in the `setup` function.
 
 
