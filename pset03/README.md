@@ -220,6 +220,7 @@ The residuals look like this
 plt.plot(z - z0 - a*((x-x0)**2 + (y-y0)**2),"x")
 ```
 
+![least_squares_residuals](https://user-images.githubusercontent.com/21654151/193386423-ab54cbca-6947-43b4-bd42-c88585e31d9c.png)
 
 
 *(c) Estimate the noise in the data, and from that, estimate the uncertainty in a. Our target focal length was 1.5 metres. What did we actually get, and what is the error bar? In case all facets of conic sections are not at your immediate recall, a parabola that goes through (0,0) can be written as y = x2/(4f) where f is the focal length. When calculating the error bar for the focal length, feel free to approximate using a first-order Taylor expansion.*
