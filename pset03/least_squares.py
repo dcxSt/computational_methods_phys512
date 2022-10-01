@@ -29,8 +29,23 @@ plt.show()
 
 
 # Estimate noise
-noise_vec = z - z0 - a*((x-x0)**2 + (y-y0)**2)
-rmse = np.sqrt(noise_vec.T@noise_vec/len(noise_vec))
-print(f"INFO: RMSE = {rmse}")
+noise_mat = np.diag(z - A@m)
+cov_mat = inv(A.T@inv(noise_mat)@A)
+sigma_a = np.sqrt(cov_mat[1,1])
+print(f"INFO: Uncertainty in a = {sigma_a}")
+
+# Find focal length
+foc = 1/(4*a)
+print(f"INFO: Focal length = {foc} mm")
+
+# Find sigma_f
+sigma_f = sigma_a / (4*a)
+print(f"INFO: sigma_f = {sigma_f} mm")
+
+# noise_vec = z - z0 - a*((x-x0)**2 + (y-y0)**2)
+# rmse = np.sqrt(noise_vec.T@noise_vec/len(noise_vec))
+# print(f"INFO: RMSE = {rmse}")
+# sigma_a = rmse / np.sqrt(len(noise_vec))
+# print(f"INFO: Uncertainty in a = {sigma_a}")
 
 

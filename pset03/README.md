@@ -142,6 +142,8 @@ After a bit of experimentation, it takes a few halflives for Thorium230 to reach
 
 # Problem 3
 
+The code for this problem is in `least_squares.py`
+
 *We’ll do a linear least-squares fit to some real data in this prob- lem. Look at the file dish zenith.txt. This contains photogrammetry data for a prototype telescope dish. Photogrammetry attempts to reconstruct surfaces by working out the 3-dimensional positions of targets from many pictures (as an aside, the algorithms behind photogrammetry are another fun least-squares- type problem, but beyond the scope of this class). The end result is that dish zenith.txt contains the (x,y,z) positions in mm of a few hundred targets placed on the dish. The ideal telescope dish should be a rotationally symmetric paraboloid. We will try to measure the shape of that paraboloid, and see how well we did.*
 
 *(a) Helpfully, I have oriented the points in the file so that the dish is pointing in the +z direction (in the general problem, you would have to fit for direction the dish is pointing in as well, but we will skip that here). For a rotationally symmetric paraboloid, we know that*
@@ -226,14 +228,24 @@ Unfortunately these resituals look pretty correlated, so our assumption that the
 
 *(c) Estimate the noise in the data, and from that, estimate the uncertainty in a. Our target focal length was 1.5 metres. What did we actually get, and what is the error bar? In case all facets of conic sections are not at your immediate recall, a parabola that goes through (0,0) can be written as y = x2/(4f) where f is the focal length. When calculating the error bar for the focal length, feel free to approximate using a first-order Taylor expansion.*
 
-The RMSE can be estamted by 
+The uncertainty in `a` can be estamted by 
 
 ```python
-noise_vec = z - z0 - a*((x-x0)**2 + (y-y0)**2)
-rmse = np.sqrt(noise_vec.T@noise_vec/len(noise_vec))
+# Estimate noise
+noise_mat = np.diag(z - A@m)
+cov_mat = inv(A.T@inv(noise_mat)@A)
+sigma_a = np.sqrt(cov_mat[1,1])
+print(f"INFO: Uncertainty in a = {delta_a}")
 ```
 
-This gives us an RMSE of `3.7683386487847335`. The uncertainty in the focal length goes like 
+This gives an uncertainty in a of `2.66e-08`. The focal length which is `f=1/(4*a)` is computed to be `1499.66` millimeters. The error on this can be approximated with taylor expansion. So `sigma_f` is the absolute value of the derivative of `f` wrt `a`, times `sigma_a`. This gives 
+
+```python
+sigma_f = sigma_a / (2 * a**2)
+```
+
+Which gives a `sigma_f` of `3.989` millimeters. 
+
 
 
 
