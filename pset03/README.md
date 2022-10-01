@@ -118,8 +118,7 @@ pb206=y[idx["Pb206"]]
 
 Yes, it makes sense, for the reason provided in the question! It makes sense intuitively because if we ignore all the intermediate products, we expect exponential decay of uranium-238 and exponential growth of pb230, which is approximately what the plots show us. 
 
-
-
+![u238_pb206](https://user-images.githubusercontent.com/21654151/193378458-8bb3cb35-cd0e-42c3-a835-bc5a2249b627.png)
 
 *Now plot the ratio of Thorium 230 to U234 over a region where that is interesting. Radioactive decay is frequently used to date rocks, and these results point at how you can determine the age of a uranium-bearing rock that is anywhere from thousands to billions of years old. (Of course, in this case the starting ratio of U234 to U238 would probably have already reached its long-term average when the rock was formed, but you could still use the U234/Th230 ratio under that assumption.)*
 
