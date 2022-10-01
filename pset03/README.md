@@ -138,6 +138,9 @@ th230=y[idx["Th230"]]
 
 After a bit of experimentation, it takes a few halflives for Thorium230 to reach equilibrium. Since decay rate is proportional to quanity, it makes sense that the quantity starts growing, proportional to the decay rate of Uranium-238, and then slows to an equilibrium value as the decay rate of Th230 grows to balance it's rate of creation. 
 
+![u238_th230](https://user-images.githubusercontent.com/21654151/193379040-9f37a177-16fb-4ba8-bc25-3c197752c259.png)
+
+
 
 
 
