@@ -140,6 +140,100 @@ After a bit of experimentation, it takes a few halflives for Thorium230 to reach
 
 ![u238_th230](https://user-images.githubusercontent.com/21654151/193379040-9f37a177-16fb-4ba8-bc25-3c197752c259.png)
 
+# Problem 3
+
+*We’ll do a linear least-squares fit to some real data in this prob- lem. Look at the file dish zenith.txt. This contains photogrammetry data for a prototype telescope dish. Photogrammetry attempts to reconstruct surfaces by working out the 3-dimensional positions of targets from many pictures (as an aside, the algorithms behind photogrammetry are another fun least-squares- type problem, but beyond the scope of this class). The end result is that dish zenith.txt contains the (x,y,z) positions in mm of a few hundred targets placed on the dish. The ideal telescope dish should be a rotationally symmetric paraboloid. We will try to measure the shape of that paraboloid, and see how well we did.*
+
+*(a) Helpfully, I have oriented the points in the file so that the dish is pointing in the +z direction (in the general problem, you would have to fit for direction the dish is pointing in as well, but we will skip that here). For a rotationally symmetric paraboloid, we know that*
+
+```python
+z - z0 = a*((x - x0)**2 + (y - y0)**2)
+```
+
+*and we need to solve for x0 , y0 , z0 , and a. While at first glance this problem may appear non-linear, show that we can pick a new set of parameters that make the problem linear. What are these new parameters, and how do they relate to the old ones?*
+
+Lets factor this formula, and create new parameters, `mu0` through `mu3`. We need four of them since we have four parameters to start with. 
+
+```python
+z = z0 + a*(x0**2 + y0**2) + a*(x**2 + y**2) + a*(x**2 + y**2) - 2*a*x0*x - 2*a*y0*y
+mu0 = z0 + a*(x0**2 + y0**2)
+mu1 = a
+mu2 = -2*a*x0
+mu3 = -2*a*y0
+```
+
+With these new parameters, our equations are linear. To cast it into the regular form `A@m=d`, let `d=z`, where `z` is a k-vector, `m` is a horizontal stack of 4xk columns of our new variables `mu0,mu1,mu2,mu3`, and `A` is an kx4 vertical stack of rows with data `1,x**2+y**2,x,y`. 
+
+*(b) Carry out the fit. What are your best-fit parameters?*
+
+Now, we carry out the fit assuming uncorrelated, uniform noise. This makes our lives simple because we can just throw out the `N` matrix. 
+
+```python
+chisq = (d-A@m).T@(d-A@m)
+```
+
+Taking a derivative and then setting the result to zero, we get
+
+```python
+A.T@A@m == A.T@d
+```
+
+Since `A.T@A` is just a four by four matrix, we can invert it. 
+
+```python
+m = np.inv(A.T@A)@A.T@d
+```
+
+The code to load the data and carry out a least squares fit is displayed here
+
+```python
+# Load the data
+dta=np.loadtxt("dish_zenith.txt",delimiter=" ",dtype=np.float64)
+# Unpack data into 1d arrays
+x,y,z=dta[:,0],dta[:,1],dta[:,2]
+
+# Cast our data into the A matrix
+A=np.vstack([np.ones(x.shape),x**2+y**2,x,y]).T
+# Solve the chi-squared problem
+m = inv(A.T@A)@A.T@z
+print(f"INFO: Best fit params m={m}")
+
+# Get the parameters from our fit
+a = m[1]
+x0 = m[2] / (-2*a)
+y0 = m[3] / (-2*a)
+z0 = m[0] - a*(x0**2 + y0**2)
+```
+
+The best fit parameters obtained are
+
+```python
+a=0.00016670445477401277
+x0=-1.3604886221973425
+y0=58.22147608157945
+z0=-1512.8772100367855
+```
+
+The residuals look like this 
+
+```python
+plt.plot(z - z0 - a*((x-x0)**2 + (y-y0)**2),"x")
+```
+
+
+
+*(c) Estimate the noise in the data, and from that, estimate the uncertainty in a. Our target focal length was 1.5 metres. What did we actually get, and what is the error bar? In case all facets of conic sections are not at your immediate recall, a parabola that goes through (0,0) can be written as y = x2/(4f) where f is the focal length. When calculating the error bar for the focal length, feel free to approximate using a first-order Taylor expansion.*
+
+
+
+
+
+
+
+
+
+
+
 
 
 
