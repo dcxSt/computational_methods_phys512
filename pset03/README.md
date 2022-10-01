@@ -1,5 +1,7 @@
 # Problem 1
 
+The code for this problem is in `rk4.py`
+
 *Write an RK4 integrator with prototype to take one step:*
 
 ```python
@@ -18,7 +20,7 @@ def rk4_step(fun,x:float,y:float,h:float):
 
 *Now write another stepper `rk4_stepd` that takes a step of length `h`, compares that to two steps of length h/2, and uses them to cancel out the leading-order error term from RK4. How many function evaluations per step does this one use? Use this modified stepper to carry out the same ODE solution using the same number of function evaluations as the original. Which is more accurate?*
 
-The combination of the half steps that cancels the fifth order term is `(16*ynext_hh - ynext)/15`. This can be found in [Numerical Recipies](http://numerical.recipes/book/book.html). 
+The combination of the half steps that cancels the fifth order term is `(16*ynext_hh - ynext)/15`. This can be found in [Numerical Recipies](http://numerical.recipes/book/book.html). We don't derive this result because it would litterally involve taking like 50 derivatives. 
 
 ```python
 def rk4_stepd(fun,x:float,y:float,h:float):
@@ -47,9 +49,10 @@ Since our `rk4` integrator requires 4 function evaluations, we need to make `4 +
 
 **Bonus:** I used an RK4 integrator to solve [this](https://editor.p5js.org/dcxSt/sketches/VyBm8dgZ_) toy newtonian n-body planitary system in P5 JS. You can play around with it by initiating mass objects with `Mass(x,y,vx,vy,mass)` in the `setup` function!
 
-You can find the code for this question in `rk4.py`.
 
 # Problem 2
+
+The code for this problem is in `u238decay.py`
 
 *(a) Write a program to solve for the decay products of U238 (refer to slides for the decay chain). You can use the ODE solver from scipy, but you’ll need to set the problem up properly. Please make sure to include all the decay prodcuts in the chain. Assume you start from a sample of pure U238 (in nature, this sort of separation happens chemically when rocks are formed). Which solver would you use for this problem?*
 
@@ -97,13 +100,39 @@ def decay_timestep(x,y,decay_rate=decay_rate):
     return -y*decay_rate + np.roll(y*decay_rate,1) 
 ```
 
+Now we can integrate
+
+```python
+from scipy.integrate import solve_ivp
+x0,x1=0,halflife[idx["U238"]]
+y0=np.zeros(decay_rate.shape)
+y0[0]=1.0
+ans=solve_ivp(decay_timestep,[x0,x1],y0,method='Radau',t_eval=np.linspace(x0,x1,1000))
+t=ans['t']
+y=ans['y']
+u238=y[idx["U238"]]
+pb206=y[idx["Pb206"]]
+```
+
+*(b) Plot the ratio of Pb206 to U238 as a function of time over a region where it’s interesting. Does this make sense analytically? (If you look at the decay chain, all the half-lives are short compared to U238, so you can approximate the U238 decaying instantly to lead.*
+
+Yes, it makes sense, for the reason provided in the question! It makes sense intuitively because if we ignore all the intermediate products, we expect exponential decay of uranium-238 and exponential growth of pb230, which is approximately what the plots show us. 
+
+
+
+
+*Now plot the ratio of Thorium 230 to U234 over a region where that is interesting. Radioactive decay is frequently used to date rocks, and these results point at how you can determine the age of a uranium-bearing rock that is anywhere from thousands to billions of years old. (Of course, in this case the starting ratio of U234 to U238 would probably have already reached its long-term average when the rock was formed, but you could still use the U234/Th230 ratio under that assumption.)*
 
 
 
 
 
 
-*(b) Plot the ratio of Pb206 to U238 as a function of time over a region where it’s interesting. Does this make sense analytically? (If you look at the decay chain, all the half-lives are short compared to U238, so you can approximate the U238 decaying instantly to lead. Now plot the ratio of Thorium 230 to U234 over a region where that is interesting. Radioactive decay is frequently used to date rocks, and these results point at how you can determine the age of a uranium-bearing rock that is anywhere from thousands to billions of years old. (Of course, in this case the starting ratio of U234 to U238 would probably have already reached its long-term average when the rock was formed, but you could still use the U234/Th230 ratio under that assumption.)*
+
+
+
+
+
 
 
 
