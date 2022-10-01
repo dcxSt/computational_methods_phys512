@@ -26,16 +26,19 @@ def rk4_stepd(fun,x:float,y:float,h:float):
     fun : function
         dy/dx = fun(x,y)
     x : float 
-        The x coordinate
+        The x coordinates to time evolve
     y : float 
-        The y coordinate 
+        The y coordinates to time evolve
     h : float
         The stepsize
     """
-    # Take step h
+    # Take one step of size h
     ynext=rk4_step(fun,x,y,h)
-    ynext_hh=rk4_step(fun,x+0.5*h,rk4_step(fun,x,y,0.5*h),0.5*h)
-    return (16*ynext_hh - ynext)/15
+    # Take two steps of size 0.5*h
+    ynext_half=rk4_step(fun,x,y,0.5*h)
+    ynext_2half=rk4_step(fun,x+0.5*h,ynext_half,0.5*h)
+    # Return the combined formula to cancel order h**5 terms
+    return (16*ynext_2half - ynext)/15 
 ```
 
 Since our `rk4` integrator requires 4 function evaluations, we need to make `4 + 2*4 = 12` in total. Four for `h`, then another eight for `h/2` for `h/2`.
