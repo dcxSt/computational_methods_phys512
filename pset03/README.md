@@ -122,6 +122,22 @@ Yes, it makes sense, for the reason provided in the question! It makes sense int
 
 *Now plot the ratio of Thorium 230 to U234 over a region where that is interesting. Radioactive decay is frequently used to date rocks, and these results point at how you can determine the age of a uranium-bearing rock that is anywhere from thousands to billions of years old. (Of course, in this case the starting ratio of U234 to U238 would probably have already reached its long-term average when the rock was formed, but you could still use the U234/Th230 ratio under that assumption.)*
 
+The halflife of Thorium 230 is order of a hundred thousand years, 
+
+```python
+x0=0
+x1=30*halflife[idx["Th230"]]
+y0=np.zeros(decay_rate.shape)
+y0[0]=1.0 # start with just uranium
+ans=solve_ivp(decay_timestep,[x0,x1],y0,method='Radau',t_eval=np.linspace(x0,x1,1000*100))
+t=ans['t']
+y=ans['y']
+u238=y[idx["U238"]]
+th230=y[idx["Th230"]]
+```
+
+After a bit of experimentation, it takes a few halflives for Thorium230 to reach equilibrium. Since decay rate is proportional to quanity, it makes sense that the quantity starts growing, proportional to the decay rate of Uranium-238, and then slows to an equilibrium value as the decay rate of Th230 grows to balance it's rate of creation. 
+
 
 
 
