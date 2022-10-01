@@ -28,5 +28,9 @@ plt.savefig("img/least_squares_residuals.png",dpi=500)
 plt.show()
 
 
+# Estimate noise
+noise_vec = z - z0 - a*((x-x0)**2 + (y-y0)**2)
+rmse = np.sqrt(noise_vec.T@noise_vec/len(noise_vec))
+print(f"INFO: RMSE = {rmse}")
 
 

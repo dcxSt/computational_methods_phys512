@@ -222,9 +222,18 @@ plt.plot(z - z0 - a*((x-x0)**2 + (y-y0)**2),"x")
 
 ![least_squares_residuals](https://user-images.githubusercontent.com/21654151/193386423-ab54cbca-6947-43b4-bd42-c88585e31d9c.png)
 
+Unfortunately these resituals look pretty correlated, so our assumption that the noise was random wasn't the best. 
 
 *(c) Estimate the noise in the data, and from that, estimate the uncertainty in a. Our target focal length was 1.5 metres. What did we actually get, and what is the error bar? In case all facets of conic sections are not at your immediate recall, a parabola that goes through (0,0) can be written as y = x2/(4f) where f is the focal length. When calculating the error bar for the focal length, feel free to approximate using a first-order Taylor expansion.*
 
+The RMSE can be estamted by 
+
+```python
+noise_vec = z - z0 - a*((x-x0)**2 + (y-y0)**2)
+rmse = np.sqrt(noise_vec.T@noise_vec/len(noise_vec))
+```
+
+This gives us an RMSE of `3.7683386487847335`. The uncertainty in the focal length goes like 
 
 
 
