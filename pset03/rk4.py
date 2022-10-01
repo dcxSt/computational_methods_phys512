@@ -23,10 +23,13 @@ def rk4_stepd(fun,x:float,y:float,h:float):
     h : float
         The stepsize
     """
-    # Take step h
+    # Take one step of size h
     ynext=rk4_step(fun,x,y,h)
-    ynext_hh=rk4_step(fun,x+0.5*h,rk4_step(fun,x,y,0.5*h),0.5*h)
-    return (16*ynext_hh - ynext)/15
+    # Take two steps of size 0.5*h
+    ynext_half=rk4_step(fun,x,y,0.5*h)
+    ynext_2half=rk4_step(fun,x+0.5*h,ynext_half,0.5*h)
+    # Return the combined formula to cancel order h**5 terms
+    return (16*ynext_2half - ynext)/15 
 
 
 if __name__=="__main__":
