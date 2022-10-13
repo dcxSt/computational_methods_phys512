@@ -4,6 +4,8 @@
 
 ## Problem 1 (a)
 
+*The code for this problem can be found in the file with this relative path `./mcmc/a.py`*
+
 Using the standard notation `A(m)=d` where `m=(a,t0,w)` is the three tuple of our model parameters, we cast this into a non-linear chi square optimization. 
 
 ```python
