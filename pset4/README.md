@@ -62,6 +62,9 @@ Plot of the RMS of the residuals converging very quicklly which justifies the nu
 
 
 
+![q1a_best_fit](https://user-images.githubusercontent.com/21654151/195674173-8eaf7aea-f1d0-46fe-809f-c55949f7cc1f.png)
+![q1a_residuals](https://user-images.githubusercontent.com/21654151/195674177-29c3aaff-43f9-47f7-ad7e-f0db3e7e6d4c.png)
+![q1a_newton_converge](https://user-images.githubusercontent.com/21654151/195674175-221ae87b-9143-4b8f-9f79-a3c3cd47c3bf.png)
 
 
 
