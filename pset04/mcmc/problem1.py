@@ -174,9 +174,9 @@ if __name__=="__main__":
     # Compare with analytic derivatives
     print(f"INFO: Difference between params obtained with analytic vs numerical derivs")
     aa,t0a,wa=m_analytic
-    print(f"\t\tda={a-aa:.2e}, dt0={t0-t0a:.2e}, dw={w-wa:.2e}")
-    print("INFO: Compare these with linearized errors")
-    print(f"\t\tsig_a={sig_a:.2e}, sig_t0={sig_t0:.2e}, sig_w={sig_w:.2e}")
+    print(f"\tda={a-aa:.2e},\n\tdt0={t0-t0a:.2e},\n\tdw={w-wa:.2e}")
+    print("INFO: Compare these with linearized errors, (above should be order of magnitude smaller than below)")
+    print(f"\tsig_a={sig_a:.2e},\n\tsig_t0={sig_t0:.2e},\n\tsig_w={sig_w:.2e}")
     m3=m.copy() # Three parameters only
 
     ### 1d
@@ -204,11 +204,21 @@ if __name__=="__main__":
     for i in err_d: print(i)
     print("INFO: Chi squared minimized, newton iter converged.")
     print("INFO: The initial parameters where")
-    print(f"\t\ta={a:.2e},b={b:.2e},c={c:.2e},t0={t0:.2e},dt={dt:.2e},w={w:.2e}")
+    print(f"\ta={a:.2e},\n\tb={b:.2e},\n\tc={c:.2e},\n\tt0={t0:.2e},\n\tdt={dt:.2e},\n\tw={w:.2e}")
     a,b,c,t0,dt,w=m
     print("INFO: The best fit parameters are")
-    print(f"\t\ta={a:.2e},b={b:.2e},c={c:.2e},t0={t0:.2e},dt={dt:.2e},w={w:.2e}")
+    print(f"\ta={a:.2e},\n\tb={b:.2e},\n\tc={c:.2e},\n\tt0={t0:.2e},\n\tdt={dt:.2e},\n\tw={w:.2e}")
     m6=m.copy() # six parameters vector
+
+    print("\nINFO: Approximate errors")
+    # Approximate the noise, assume uncorrelated
+    sigma=np.mean(np.abs(d-A3(m6,t)))
+    Ap=numerical_grad(A3,m6,t) # compute gradient once at optimum for further calculations
+    print(f"DEBUG: Ap.shape={Ap.shape}, (Ap.T@Ap).shape={(Ap.T@Ap).shape}")
+    covar=inv(Ap.T@Ap/sigma**2) # compute covariance matrix linear estimate
+    sig_a,sig_b,sig_c,sig_t0,sig_dt,sig_w=np.sqrt(np.diag(covar))
+    print(f"INFO: Estimate of linearized errors \n\tsig_a={sig_a:.2e}, \n\tsig_b={sig_b:.2e}, \n\tsig_c={sig_c:.2e}, \n\tsig_t0={sig_t0:.2e}, \n\tsig_dt={sig_dt:.2e}, \n\tsig_w={var_w:.2e}")
+    print(f"INFO: Estimate of normalized errors \n\tsig_a/a={sig_a/a:.2e}, \n\tsig_b/b={sig_b/b:.2e}, \n\tsig_c/c={sig_c/c:.2e}, \n\tsig_t0/(tf-ti)={sig_t0/(max(t)-min(t)):.2e}, \n\tsig_dt/dt={sig_dt/dt:.2e}, \n\tsig_w/w={sig_w/w:.2e}")
 
 
 
