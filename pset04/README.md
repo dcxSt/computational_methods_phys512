@@ -104,6 +104,101 @@ This is good, I expected them to all be about the same order of magnitude.
 
 Repeat part (a) but use numerical derivatives. 
 
+First we ballpark the optimal stepsize for a 2-point central numerical derivative by taylor expanding, throwing out higher order terms, adding the roundoff error divided by dx as a random variable, and taking a derivative of what's left to minimize this one, assuming the third derivative `f'''(x)` is order 1. We find that `dx=2np.sqrt(epsilon)`, where epsilon is the roundoff error, which we approximate as `1.0e-16`. So we set our stepsize to `dx=2.0e-08` (aka `h`). 
+
+Now we write a numerical partial derivative operator
+
+```python
+def ndiff(f,x,idx):
+    """Take the partial derivative of f at x wrt to the idx'th argument.
+
+    f : function
+        A multivariate function
+    x : np.ndarray
+        A vector argument, where we evaluate the derivaitve at
+    idx : int
+        The index of the direction along which we evaluate the partial 
+        deriv
+    """
+    # Select some optimal step sizes
+    # We approximate roundoff error epsilon=10.0e-16
+    # Highest order term in 2 point derivative TS expansion is o(dx**3)
+    # Optimal step size is about 2*sqrt(epsilon) = 2.0e-08
+    # (ballpark back of envolope estimate)
+    dx = 2.0e-08
+    step_h = np.zeros(x.shape)
+    step_h[idx] = dx
+    # Return the numerical partial derivative of f wrt it's argument at 
+    # idx, at x
+    return (f(x+step_h) - f(x-step_h))/(2*dx)
+```
+
+Then we use this partial derivative operator to write a numerical gradient opertor for our function `A`. Noting that python syntax is so lovely that we can just evaluate this with a vector `t`. 
+
+```python
+def numerical_gradA(m,t):
+    """Numerically compute the gradiant of A wrt m at m,t"""
+    dAda  = ndiff(lambda m:A(m,t),m,0)
+    dAdt0 = ndiff(lambda m:A(m,t),m,1)
+    dAdw  = ndiff(lambda m:A(m,t),m,2)
+    return np.vstack([dAda, dAdt0, dAdw]).T
+```
+
+Now we adapt our newton iteration to use our numerical derivative. 
+
+```python
+def newton_iter_numerical(m,t,d):
+    """Returns next iteration of newton's method"""
+    r=d-A(m,t) # residuals
+    Ap=numerical_gradA(m,t)
+    return m + inv(Ap.T@Ap)@Ap.T@r # Trivial Ninv's cancel
+```
+
+Running this we find that our best fit parameters agree extreemely well with the analytical derivatives. The answers are not statistically different since they are well within the estimated std in the noise of each other. Below the subscripts `numerical` and `analytic` indicate which method was used to evaluate the derivatives. We compare these differences with the estimated errors in our parameters to great satisfaction. 
+
+```
+a_numerical-a_analytic   = 6.20e-09
+err_a                    = 3.26e-04
+
+t0_numerical-t0_analytic = -4.53e-13
+err_t0                   = 4.11e-09
+
+w_numerical-w_analytic   = -1.56e-13
+err_w                    = 5.82e-09
+```
+
+## Problem 1 (d) 
+
+We adapt our code above to deal with a the more general case. The numerical derivative operator remains the same, but the gradient and newton iterator are generalized and updated. 
+
+```python
+def numerical_grad(A,m,t):
+    """Numerically compute the gradiant of A wrt m at m,t
+
+    A : function
+        Assumes A takes two arguments (params, times)
+    m : array-like
+    t : np.ndarray
+    """
+    return np.vstack([ndiff(lambda m:A(m,t),m,idx) for idx in range(len(m))]).T
+
+def newton_iter_numerical(A,m,t,d):
+    """Returns next iteration of newton's method
+
+    A : function / model
+        Takes two params (model_params, times)
+    m : array-like
+        our model parameters, passed to A as first arg
+    t : np.ndarray
+        Times at which LASER beam is measured
+    d : measured data
+    """
+    r=d-A(m,t) # residuals
+    Ap=numerical_grad(A,m,t)
+    return m + inv(Ap.T@Ap)@Ap.T@r # Ninv's cancel
+```
+
+Plots of this new fit. 
 
 
 
