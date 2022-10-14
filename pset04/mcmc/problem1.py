@@ -218,7 +218,7 @@ if __name__=="__main__":
     covar=inv(Ap.T@Ap/sigma**2) # compute covariance matrix linear estimate
     sig_a,sig_b,sig_c,sig_t0,sig_dt,sig_w=np.sqrt(np.diag(covar))
     print(f"INFO: Estimate of linearized errors \n\tsig_a={sig_a:.2e}, \n\tsig_b={sig_b:.2e}, \n\tsig_c={sig_c:.2e}, \n\tsig_t0={sig_t0:.2e}, \n\tsig_dt={sig_dt:.2e}, \n\tsig_w={var_w:.2e}")
-    print(f"INFO: Estimate of normalized errors \n\tsig_a/a={sig_a/a:.2e}, \n\tsig_b/b={sig_b/b:.2e}, \n\tsig_c/c={sig_c/c:.2e}, \n\tsig_t0/(tf-ti)={sig_t0/(max(t)-min(t)):.2e}, \n\tsig_dt/dt={sig_dt/dt:.2e}, \n\tsig_w/w={sig_w/w:.2e}")
+    print(f"INFO: Estimate of normalized (scaled) errors \n\tsig_a/a={sig_a/a:.2e}, \n\tsig_b/b={sig_b/b:.2e}, \n\tsig_c/c={sig_c/c:.2e}, \n\tsig_t0/(tf-ti)={sig_t0/(max(t)-min(t)):.2e}, \n\tsig_dt/dt={sig_dt/dt:.2e}, \n\tsig_w/w={sig_w/w:.2e}")
 
 
 

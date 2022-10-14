@@ -208,6 +208,16 @@ Plots of this new fit.
 ![q1d_newton_converge](https://user-images.githubusercontent.com/21654151/195946301-d5caf908-cf4c-448a-8fc2-d519783efc90.png)
 
 
+The estimated errors in the measurement are
+
+```
+sig_a  = 2.30e-04
+sig_b  = 2.20e-04 
+sig_c  = 2.15e-04 
+sig_t0 = 2.73e-09 
+sig_dt = 3.29e-08 
+sig_w  = 3.39e-17
+```
 
 
 
