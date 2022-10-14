@@ -34,7 +34,7 @@ Now, assuming the most basic noise model (uncorrelated uniform gaussian noise, i
 
 ```python
 from numpy.linalg import inv
-newton_iter(m,t,d):
+def newton_iter(m,t,d):
     """Returns next iteration of newton's method"""
     r=d-A(m,t) # residuals
     Ap=gradA(m,t)
@@ -58,6 +58,14 @@ for i in range(10):
     m=newton_iter(m,t,d)
 ```
 
+The optimal parameters are found to be
+
+```
+a  = 1.423
+t0 = 1.924e-04
+w  = 1.792e-05
+```
+
 Plot of the RMS of the residuals converging very quicklly which justifies the number of iterations, and plot of the model and the residuals.
 
 ![q1a_best_fit](https://user-images.githubusercontent.com/21654151/195674173-8eaf7aea-f1d0-46fe-809f-c55949f7cc1f.png)
@@ -65,6 +73,33 @@ Plot of the RMS of the residuals converging very quicklly which justifies the nu
 ![q1a_newton_converge](https://user-images.githubusercontent.com/21654151/195674175-221ae87b-9143-4b8f-9f79-a3c3cd47c3bf.png)
 
 We conclude that the model is not perfect, because it (a) doesn't account for the sidelobes, and (b) doesn't account for the little kink at the peak of our data. 
+
+
+## Problem 1 (b)
+
+Estimate the noise in your data and use that to estimate the errors in your parameters. 
+
+The noise is about `sigma=np.mean(abs(d-A(m,t)))`. Assuming uncorrelated noise, our inverse noise matrix can be estimated as an identity matrix divided by sigma squared `Ninv=1/sigma**2`. Reading off the diagonals of `inv(Ap.T@Ninv@Ap)`, we get appropriate estimates of the errors in our parameters. 
+
+```
+sigma_a  = 3.26e-04
+sigma_t0 = 4.11e-09
+sigma_w  = 5.82e-09
+```
+
+It is instructive for intuition to look at appropriately scaled values
+
+```
+sigma_a/a         = 2.29e-04
+sigma_t0/(tf-ti)  = 1.03e-05
+sigma_w/w         = 3.25e-04
+```
+
+This is good, I expected them to all be about the same order of magnitude. 
+
+## Problem a (c)
+
+Repeat part (a) but use numerical derivatives. 
 
 
 

@@ -26,8 +26,9 @@ def newton_iter(m,t,d):
     # return m + inv(Ap.T@Ninv@Ap)@Ap.T@Ninv@r
     return m + inv(Ap.T@Ap)@Ap.T@r
 
-### TESTS
+
 if __name__=="__main__":
+    ### 1a
     dta=np.load("sidebands.npz")
     t=dta['time']
     d=dta['signal']
@@ -51,7 +52,24 @@ if __name__=="__main__":
     a,t0,w=m
     print(f"INFO: The best fit parameters are a={a:.3e},t0={t0:.3e},w={w:.3e}")
 
+    ### 1b
+    # approximate the noise, assume uncorrelated
+    sigma=np.mean(np.abs(d-A(m,t)))
+    #Ninv=np.diag(np.ones(d.shape)/sigma**2)
+    Ap=gradA(m,t) # compute gradient once at optimum for further calculations
+    print(f"DEBUG: Ap.shape={Ap.shape}, (Ap.T@Ap).shape={(Ap.T@Ap).shape}")
+    covar=inv(Ap.T@Ap/sigma**2) # compute covariance matrix linear estimate
+    var_a,var_t0,var_w=covar[0,0],covar[1,1],covar[2,2]
+    print(f"INFO: Estimate of linearized errors var_a={var_a:.2e}, var_t0={var_t0:.2e}, var_w={var_w:.2e}")
+    sig_a,sig_t0,sig_w=np.sqrt(var_a),np.sqrt(var_t0),np.sqrt(var_w)
+    print(f"INFO: Estimate of linearized errors sig_a={sig_a:.2e}, sig_t0={sig_t0:.2e}, sig_w={sig_w:.2e}")
+    print(f"INFO: Estimate of normalized errors sig_a/a={sig_a/a:.2e}, sig_t0/(tf-ti)={sig_t0/(max(t)-min(t)):.2e}, sig_w/w={sig_w/w:.2e}")
+
+
+    
+
     import matplotlib.pyplot as plt
+    ### Plots from part 1 (a)
     plt.figure()
     plt.plot(t,d,"x",label="data")
     plt.plot(t,A(m,t),label="model")
