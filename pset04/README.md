@@ -201,9 +201,11 @@ def newton_iter_numerical(A,m,t,d):
 Plots of this new fit. 
 
 
+![q1d_best_fit](https://user-images.githubusercontent.com/21654151/195946278-d080402d-18de-45f1-b2cf-77d2821b1b7b.png)
 
+![q1d_residuals](https://user-images.githubusercontent.com/21654151/195946291-7ed4aca9-db98-4f62-9694-5f0f23f173cf.png)
 
-
+![q1d_newton_converge](https://user-images.githubusercontent.com/21654151/195946301-d5caf908-cf4c-448a-8fc2-d519783efc90.png)
 
 
 
