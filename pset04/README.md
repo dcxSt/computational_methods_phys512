@@ -237,6 +237,9 @@ There isn't much of a difference for small pertubations. This is normal because 
 ## Problem 1g
 
 
+![1g_param_a](https://user-images.githubusercontent.com/21654151/195974534-d7b73c3c-2080-4b82-a8d1-7aa8a05f7703.png)
+![1g_param_means_converging](https://user-images.githubusercontent.com/21654151/195974536-8c6d5c3c-c6d8-4a53-96c5-6e4d440da740.png)
+![chi_squared](https://user-images.githubusercontent.com/21654151/195974537-9026a8a9-b6c6-4fef-9e0b-f52b5a8aeecc.png)
 
 
 
