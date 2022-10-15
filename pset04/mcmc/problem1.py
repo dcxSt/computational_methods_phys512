@@ -220,6 +220,30 @@ if __name__=="__main__":
     print(f"INFO: Estimate of linearized errors \n\tsig_a={sig_a:.2e}, \n\tsig_b={sig_b:.2e}, \n\tsig_c={sig_c:.2e}, \n\tsig_t0={sig_t0:.2e}, \n\tsig_dt={sig_dt:.2e}, \n\tsig_w={var_w:.2e}")
     print(f"INFO: Estimate of normalized (scaled) errors \n\tsig_a/a={sig_a/a:.2e}, \n\tsig_b/b={sig_b/b:.2e}, \n\tsig_c/c={sig_c/c:.2e}, \n\tsig_t0/(tf-ti)={sig_t0/(max(t)-min(t)):.2e}, \n\tsig_dt/dt={sig_dt/dt:.2e}, \n\tsig_w/w={sig_w/w:.2e}")
 
+    ### Problem 1f
+    # The paremeters m6 are the mean, the 
+    cov_chol = np.linalg.cholesky(covar)
+    n = 20
+    dm = np.random.normal(size=(6,n)) # sample from the sample normal
+    m_realizations = np.vstack([m for _ in range(n)]).T + cov_chol@dm
+    chisq = (d-A3(m6,t)).T@(d-A3(m6,t))/sigma**2
+    print(f"INFO: chiquared={chisq:.5e}... and for the pertubations")
+    import matplotlib.pyplot as plt
+    plt.figure(figsize=(10,6))
+    for i in range(n):
+        realization = m_realizations[:,i] # perturb around the optimum
+        chisq_r = (d-A3(realization,t)).T@(d-A3(realization,t))/sigma**2
+        print(f"\t#{i} absolute {chisq_r:.4e}, relative {(chisq_r-chisq)/chisq:.4e}")
+        plt.plot(t,A3(m6,t)-A3(realization,t),"-",label=f"diff chisq normalized={(chisq_r-chisq)/chisq:.3e}") # plot the realization
+    # plt.plot(t,d,".",label="data")
+    #plt.plot(t,d-A3(m6,t),".",label="residuals optimal")
+    plt.legend()
+    plt.tight_layout()
+    plt.title("model pertubation difference between realizations")
+    plt.savefig("../img/p1f.png")
+    plt.show(block=True)
+        
+
 
 
     # Optionally plot plots by passing v as command line argument

@@ -3,7 +3,7 @@
 
 *DISCLAIMER: Grades are stupid and the part of your job that involves assigning numbers to students is pointless—in fact, it is harmful because it's teaching kids to guess the teacher's password instead of ignighting their passion and enabling them to follow their curiosity. I worked as a grader for a few classes at McGill and found it cumbersome because students where comming and asking me about their grades all the time, and they're totally missing the point. Feedback is imporant, but not really in the form of a grade. I try very hard not to care about my grades because they stress me out and they invade my brain and block all the good thought pathways, so please give me a good one so that I can forget about it ASAP. Learning is not the activity of teaching, learning is the product of the activity of learners. If you have faith that I'm optimizing for learning and not for grades, please don't punish me for it by deducing silly little points for not presenting all of my calculations. The very notion of grades implies a bad-faith relationship between the student and the learning institution. They have it all upside-down at McGill. I know this because I've partaken in other kinds of learning experiances that work much better such as the [recurse center](https://www.recurse.com/about) and [school 2.0](https://school2point0.com/). If you liked this spiel and agree w/ me that the mainstream education system is structurally broken, you might like [Alfie Kohn](https://www.alfiekohn.org/blog/)'s writing. Thanks for being our TA. Your feedback is much appreciated.*
 
-*All code can be found in `./mcmc/problem1.py`. I made an effort to document it sufficiently, and keep it fairly organized.*
+*All code can be found in `./mcmc/problem1.py`. I made an effort to document it sufficiently, and keep it fairly organized. It must be run from inside the `mcmc` subdirectory because it uses a relative path to load the data. It outputs numerical answers to the questions. Additionally, it generates all the plots in this readme if you pass the `v` argument, e.g. `cd mcmc;python3 problem1.py v`.*
 
 ## Problem 1 (a)
 
@@ -218,6 +218,26 @@ sig_t0 = 2.73e-09
 sig_dt = 3.29e-08 
 sig_w  = 3.39e-17
 ```
+
+## Problem 1e
+
+*Look at the residuals from subtracting your best fit model from the data. Do you believe the error bars you got by assuming the data are independent with uniform variance, and that the model is a complete description of the data?*
+
+No. As can be seen above, there is a clear pattern in our residuals, in both models, i.e. our residuals don't look like white noise. 
+
+## Problem 1f
+
+*Generate some realizations for the parameter errors using the full covariance matrix `A.T@Ninv@A` from part d. Plot the models you get from adding these parameters to the parameter errors. What is the typical difference in chi-squared for the perturbed parameters compared to the best-fit chi-squared? Is this reasonable?*
+
+There isn't much of a difference for small pertubations. This is normal because we only expect an order 2 change in optimal chi-squared. The typical differnece in chi-squared that we get by sampling from our realizations from a gaussian centered at our optimal `m`, changes our chi-squared by a fraction of about `10e-5`.
+
+
+
+
+## Problem 1g
+
+
+## Problem 1h
 
 
 
