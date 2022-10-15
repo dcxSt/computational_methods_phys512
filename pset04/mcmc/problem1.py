@@ -345,9 +345,17 @@ if __name__=="__main__":
     plt.tight_layout()
     plt.savefig("../img/1g_param_a.png")
     plt.show(block=True)
-    
 
-
+    ## Problem 1h
+    print("\nINFO: Computing Cavity Width")
+    dt = mean_params[4]
+    sigma_dt = std_params[4]
+    w  = mean_params[5]
+    sigma_w = std_params[5]
+    cavity_width      = 9*dt/w # in GHz
+    uncertainty_width = np.sqrt(sigma_dt**2 + sigma_w**2)/w
+    print(f"INFO: Cavity width={cavity_width:.5e}")
+    print(f"INFO: Uncertainty in width={uncertainty_width:.2e}")
 
 
 
