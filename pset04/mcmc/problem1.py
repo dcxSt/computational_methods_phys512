@@ -103,6 +103,68 @@ def newton_iter_numerical(A,m,t,d):
     Ap=numerical_grad(A,m,t)
     return m + inv(Ap.T@Ap)@Ap.T@r # Ninv's cancel
 
+def mcmc(d,A,m0,t,cov,sigma,nstep,step_size):
+    """Computes MCMC of chi-squared given our model A(m,t)
+
+    Parameters
+    ----------
+    d : np.ndarray
+        data
+    A : function
+        Evalueates the model, takes args (m,t)
+    m0 : array-like
+        Starting model parameters
+    t : np.ndarray
+        Times at which to evaluate LASER beam signal
+    cov : np.ndarray
+        Covariance matrix
+    sigma : float
+        The estimated noise.
+    nstep : int
+        Number of MCMC steps.
+    step_size : float
+        Scaling factor, positive float.
+
+    Returns
+    -------
+    np.ndarray
+        A trace of all parameters used along the chain.
+    np.ndarray 
+        A trace of all chi-squared values computed along the way. 
+        Shape = (nparams, nsteps)
+    """
+    # Define chi-squared function
+    def chi_squared(m0):
+        return (d-A(m0,t)).T@(d-A(m0,t))/sigma**2
+    # Take Cholesky decomposition to speed things up
+    cov_chol = np.linalg.cholesky(cov)
+    # Initiate model parameter tracer vectors
+    params_trace = np.zeros((len(m0),nstep))
+    chisq_trace  = np.zeros(nstep)
+    # Compute chisquared
+    params_trace[:,0] = m0.copy()
+    chisq_trace[0]    = chi_squared(m0)
+    # Main loop, wonder around a bit
+    for idx in range(1,nstep):
+        # Update param
+        randvec = np.random.normal(size=m0.shape)
+        m = params_trace[:,idx-1] + step_size*cov_chol@randvec
+        # Compute accept probability
+        chisq = chi_squared(m)
+        delta_chisq = chisq - chisq_trace[idx-1]
+        # Acceptance probability, determine whether to accept step
+        p = np.exp(-0.5*delta_chisq)
+        if np.random.rand() < p:
+            # Update parameters
+            params_trace[:,idx] = m
+            chisq_trace[idx]    = chisq
+        else:
+            # Stay put
+            params_trace[:,idx] = params_trace[:,idx-1]
+            chisq_trace[idx]    = chisq_trace[idx-1]
+    return params_trace, chisq_trace
+        
+
 
 if __name__=="__main__":
     ### 1a
@@ -243,6 +305,44 @@ if __name__=="__main__":
     plt.savefig("../img/p1f.png")
     plt.show(block=True)
         
+    ### Problem 1g
+    print("\nINFO: Running MCMC")
+    nstep = 10000 # Number of steps taken in each chain
+    step_size = 1.0 # Determines size of step
+    # Run chain
+    params, chisq = mcmc(d,A3,m6,t,covar,sigma,nstep,step_size)
+    # Plot Chi-squared
+    plt.figure()
+    plt.title("Chi-squared")
+    plt.xlabel("Virtual time of markov chain random walker")
+    plt.plot(chisq)
+    plt.ylabel("chi squared")
+    plt.savefig("../img/chi_squared.png")
+    plt.show(block=True)
+    # Plot mean value of parameters
+    plt.figure()
+    plt.title("Normalized Parameter means converging like sqrt n")
+    param_means = np.array([np.mean(params[:,:idx],axis=1) for idx in range(1,nstep)]).T
+    for name,param_mean in zip(('a','b','c','t0','dt','w'),param_means):
+        normalized_mean = param_mean / param_mean[-1]
+        plt.plot(normalized_mean,label=name)
+    plt.legend()
+    plt.tight_layout()
+    plt.savefig("../img/1g_param_means_converging.png")
+    plt.show(block=True)
+    # Plot a single parameter
+    plt.figure()
+    plt.title("Single parameter converging: a")
+    a = params[0,:]
+    plt.plot(a)
+    plt.xlabel("Virtual time")
+    plt.ylabel("Value of a")
+    plt.tight_layout()
+    plt.savefig("../img/1g_param_a.png")
+    plt.show(block=True)
+    
+
+
 
 
 
