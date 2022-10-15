@@ -236,6 +236,75 @@ There isn't much of a difference for small pertubations. This is normal because 
 
 ## Problem 1g
 
+Our MCMC function looks like this
+
+```python
+def mcmc(d,A,m0,t,cov,sigma,nstep,step_size):
+    """Computes MCMC of chi-squared given our model A(m,t)
+
+    Parameters
+    ----------
+    d : np.ndarray
+        data
+    A : function
+        Evalueates the model, takes args (m,t)
+    m0 : array-like
+        Starting model parameters
+    t : np.ndarray
+        Times at which to evaluate LASER beam signal
+    cov : np.ndarray
+        Covariance matrix
+    sigma : float
+        The estimated noise.
+    nstep : int
+        Number of MCMC steps.
+    step_size : float
+        Scaling factor, positive float.
+
+    Returns
+    -------
+    np.ndarray
+        A trace of all parameters used along the chain.
+    np.ndarray 
+        A trace of all chi-squared values computed along the way. 
+        Shape = (nparams, nsteps)
+    """
+    # Define chi-squared function
+    def chi_squared(m0):
+        return (d-A(m0,t)).T@(d-A(m0,t))/sigma**2
+    # Take Cholesky decomposition to speed things up
+    cov_chol = np.linalg.cholesky(cov)
+    # Initiate model parameter tracer vectors
+    params_trace = np.zeros((len(m0),nstep))
+    chisq_trace  = np.zeros(nstep)
+    # Compute chisquared
+    params_trace[:,0] = m0.copy()
+    chisq_trace[0]    = chi_squared(m0)
+    # Main loop, wonder around a bit
+    for idx in range(1,nstep):
+        # Update param
+        randvec = np.random.normal(size=m0.shape)
+        m = params_trace[:,idx-1] + step_size*cov_chol@randvec
+        # Compute accept probability
+        chisq = chi_squared(m)
+        delta_chisq = chisq - chisq_trace[idx-1]
+        # Acceptance probability, determine whether to accept step
+        p = np.exp(-0.5*delta_chisq)
+        if np.random.rand() < p:
+            # Update parameters
+            params_trace[:,idx] = m
+            chisq_trace[idx]    = chisq
+        else:
+            # Stay put
+            params_trace[:,idx] = params_trace[:,idx-1]
+            chisq_trace[idx]    = chisq_trace[idx-1]
+    return params_trace, chisq_trace
+```
+
+After running the MCMC for long enough, we find that the average parameters agree with our best-fit parameters found with the newton iterations. 
+
+The errors estimated by taking the standard deviation of our MCMC random walker also agrees pretty well with our previous results, except for `std(w)`, which is `4.5e-09`, and was previously estimated at `3.4e-17`. 
+
 
 ![1g_param_a](https://user-images.githubusercontent.com/21654151/195974534-d7b73c3c-2080-4b82-a8d1-7aa8a05f7703.png)
 ![1g_param_means_converging](https://user-images.githubusercontent.com/21654151/195974536-8c6d5c3c-c6d8-4a53-96c5-6e4d440da740.png)
@@ -245,6 +314,7 @@ There isn't much of a difference for small pertubations. This is normal because 
 
 ## Problem 1h
 
+Compute the width of a cavity
 
 
 

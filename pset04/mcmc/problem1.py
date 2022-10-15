@@ -285,7 +285,7 @@ if __name__=="__main__":
     ### Problem 1f
     # The paremeters m6 are the mean, the 
     cov_chol = np.linalg.cholesky(covar)
-    n = 20
+    n = 5
     dm = np.random.normal(size=(6,n)) # sample from the sample normal
     m_realizations = np.vstack([m for _ in range(n)]).T + cov_chol@dm
     chisq = (d-A3(m6,t)).T@(d-A3(m6,t))/sigma**2
@@ -311,6 +311,11 @@ if __name__=="__main__":
     step_size = 1.0 # Determines size of step
     # Run chain
     params, chisq = mcmc(d,A3,m6,t,covar,sigma,nstep,step_size)
+    mean_params = np.mean(params,axis=1)
+    std_params  = np.std(params,axis=1)
+    print("INFO: MCMC best fit params are")
+    for name,val,std in zip(('a','b','c','t0','dt','w'),mean_params,std_params):
+        print(f"\t{name}={val:.4e} +- {std:.1e}")
     # Plot Chi-squared
     plt.figure()
     plt.title("Chi-squared")
