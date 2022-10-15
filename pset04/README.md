@@ -231,10 +231,13 @@ No. As can be seen above, there is a clear pattern in our residuals, in both mod
 
 There isn't much of a difference for small pertubations. This is normal because we only expect an order 2 change in optimal chi-squared. The typical differnece in chi-squared that we get by sampling from our realizations from a gaussian centered at our optimal `m`, changes our chi-squared by a fraction of about `10e-5`.
 
-
+![p1f](https://user-images.githubusercontent.com/21654151/195971570-33f39db4-15e6-400a-b440-e7bff1aae284.png)
 
 
 ## Problem 1g
+
+
+
 
 
 ## Problem 1h
