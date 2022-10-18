@@ -25,7 +25,8 @@ def get_spectrum(pars,lmax=3000):
 
 plt.ion()
 
-pars=np.asarray([60,0.02,0.1,0.05,2.00e-9,1.0])
+#pars=np.asarray([60,0.02,0.1,0.05,2.00e-9,1.0])
+pars=np.asarray([69,0.022,0.12,0.06,2.1e-9,0.95])
 planck=np.loadtxt('COM_PowerSpect_CMB-TT-full_R3.01.txt',skiprows=1)
 ell=planck[:,0]
 spec=planck[:,1]
