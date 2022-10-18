@@ -28,13 +28,13 @@ def ndiff(f,x,idx):
     # idx, at x
     return (f(x+step_h) - f(x-step_h))/(2*dx)
 
-#def numerical_grad(f,m):
-#    """Numerically compute the gradiant of f
-#    
-#    f : function (think, chi-squared)
-#    m : parameters (think, model params)
-#    """
-#    return np.vstack([ndiff(f,m,idx) for idx in range(len(m))]).T
+def numerical_grad(f,m):
+    """Numerically compute the gradiant of f
+    
+    f : function (think, chi-squared)
+    m : parameters (think, model params)
+    """
+    return np.vstack([ndiff(f,m,idx) for idx in range(len(m))]).T
 
 def newton_iter_numerical(f,m):
     """Returns next iteration of newton's method
@@ -69,22 +69,22 @@ def get_spectrum(pars,lmax=3000):
     return tt[2:]
 
 
-def numerical_grad(f,m):
-    h=2.0e-08
-    grad=np.zeros(len(m))
-    print(f"DEBUG: len m={len(m)}")
-    print(f"DEBUG: f(m)={f(m)}")
-    for xi in range(len(m)):
-        print(f"\nDEBUG: xi={xi}")
-        dm = np.zeros(len(m))
-        dm[xi] = h*max(abs(m[xi]),1.0e-2) # make sure it's the right scale
-        ### DEBUG
-        print(f"DEBUG: |dm|={h*max(m[xi],1.0e-2)}")
-        print(f"DEBUG: f(m+dm)={f(m+dm)}, f(m-dm)={f(m-dm)}")
-        dfdxi=(f(m+dm)-f(m-dm))/(2*h*max(abs(m[xi]),1.0e-2))
-        print(f"DEBUG: df/dxi={dfdxi}")
-        grad[xi]=dfdxi
-    return grad
+# def numerical_grad(f,m):
+#     h=2.0e-08
+#     grad=np.zeros(len(m))
+#     print(f"DEBUG: len m={len(m)}")
+#     print(f"DEBUG: f(m)={f(m)}")
+#     for xi in range(len(m)):
+#         print(f"\nDEBUG: xi={xi}")
+#         dm = np.zeros(len(m))
+#         dm[xi] = h*max(abs(m[xi]),1.0e-2) # make sure it's the right scale
+#         ### DEBUG
+#         print(f"DEBUG: |dm|={h*max(m[xi],1.0e-2)}")
+#         print(f"DEBUG: f(m+dm)={f(m+dm)}, f(m-dm)={f(m-dm)}")
+#         dfdxi=(f(m+dm)-f(m-dm))/(2*h*max(abs(m[xi]),1.0e-2))
+#         print(f"DEBUG: df/dxi={dfdxi}")
+#         grad[xi]=dfdxi
+#     return grad
 
 
 def scale_params(m,m0):
@@ -139,8 +139,6 @@ for i in range(30):
     print(f"before pars={pars}")
     pars-=grad*stepsize
     print(f"pars={pars}")
-
-
     chisq_arr.append(get_chisq(pars,spec,errs))
 
 print("INFO:chisq array")
