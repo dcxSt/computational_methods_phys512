@@ -42,8 +42,10 @@ def numerical_grad(f,x):
     return np.vstack([ndiff(f,x,idx) for idx in range(len(x))]).T
 
 
+# Problem specitc chi-squared
 # used by chi_squared
 def get_spectrum(pars,lmax=3000):
+    """Evaluate model at pars"""
     H0=pars[0]
     ombh2=pars[1]
     omch2=pars[2]
@@ -60,43 +62,17 @@ def get_spectrum(pars,lmax=3000):
     tt=cmb[:,0]    #you could return the full power spectrum here if you wanted to do say EE
     return tt[2:]
 
-
-def get_chisq(pars,spec,errs):
+def get_chisq(pars,spec,errs,A=get_spectrum):
     """Evalueate chi-sq"""
-    model=get_spectrum(pars)
+    model=A(pars)
     model=model[:len(spec)]
     resid=spec-model
     return np.sum((resid/errs)**2)
 
-def get_chisq_p(s_pars,spec,errs,m0):
-    pars=s_pars*m0 # scaled parameters are pars/m0=:s_pars
-    model=get_spectrum(pars)
-    model=model[:len(spec)]
-    resid=spec-model
-    return np.sum((resid/errs)**2) # return chi-sq
+def newton_iter(A,m,d,m0,Ninv):
+    return m + newton_delta(A,m,d,m0,Ninv)
 
-def f(s_pars):
-    return get_chisq_p(s_pars,spec,errs,m0)
-
-def get_spectrum_p(s_pars):
-    model=get_spectrum(s_pars*m0) # strange python scope allows me to m0
-    model=model[:len(spec)]
-    return model
-
-
-# def newton_iter_numerical(get_spectrum_p,pars,spec,m0=m0):
-#     s_pars=pars/m0
-#     model=get_spectrum_p(s_pars)
-#     r=spec-model
-#     grad_p=numerical_grad(get_spectrum_p,s_pars)
-#     s_pars = s_pars + pinv(grad_p.T@grad_p)@grad_p.T@r # s_ is for scaled
-#     #grad=grad_p*m0 # _p suffix is for prime
-#     print(f"DEBUG: grad_p computed, shape={grad_p.shape}")
-#     print(f"\ts_pars={s_pars}")
-#     print(f"")
-#     return s_pars*m0#pars + inv(grad.T@grad)@grad.T@r # Ninv's cancel
-
-def newton_iter(A,m,d,m0):
+def newton_delta(A,m,d,m0,Ninv):
     """Iterate newton's method to minimize (A(m)-d).T@Ninv@(A(m)-d)
 
     We don't need the errors because, for our purposes they are 
@@ -114,6 +90,8 @@ def newton_iter(A,m,d,m0):
     m0 : ndarray
         To make sure our parameters are more or less optimal scale for 
         the numerical derivatives. The size must match the size of m. 
+    Ninv : ndarray
+        1d numpy array representing diagonal uncorrelated noise matrix.
 
     Returns
     -------
@@ -121,21 +99,6 @@ def newton_iter(A,m,d,m0):
     """
     # This scaled model function uses it's environment, 
     # like a closure in other languages
-    def A_scaled(m_scaled):
-        model=A(m_scaled*m0) 
-        model=model[:len(d)] # trunkate model to fit data size
-        return model
-    m_scaled=m/m0               # Scale the input appropriately
-    model=A_scaled(m_scaled)    # Evaluate the model
-    resid=d-model               # Compute residuals
-    grad_scaled=numerical_grad(A_scaled,m_scaled) # Scaling important for this step
-    m_scaled += pinv(grad_scaled.T@grad_scaled)@grad_scaled.T@resid # Update
-    return m_scaled*m0          # Re-scale and return
-
-def newton_iter2(A,m,d,m0,Ninv):
-    """
-    Assumes Ninv is 1d rep of diagonal matrix
-    """
     def A_scaled(m_scaled):
         model=A(m_scaled*m0)
         model=model[:len(d)] # trunkate model to fit data size
@@ -146,10 +109,8 @@ def newton_iter2(A,m,d,m0,Ninv):
     grad_scaled=numerical_grad(A_scaled,m_scaled) # Compute gradiant
     grad=grad_scaled/m0         # Undo normalization scaling
     cov=inv((grad.T*Ninv)@grad) # Covariance matrix
-    print(f"DEBUG: Compare cov matrices to debug get cov func\n\t{cov-get_covariance_matrix(A,m,d,m0,Ninv)}\n")
-    return m + cov@(grad.T*Ninv)@resid
-
-
+    #print(f"DEBUG: Compare cov matrices to debug get cov func\n\t{cov-get_covariance_matrix(A,m,d,m0,Ninv)}\n")
+    return cov@(grad.T*Ninv)@resid
 
 def get_covariance_matrix(A,m,d,m0,Ninv):
     """Get the covariance matrix at m
@@ -181,59 +142,60 @@ def get_covariance_matrix(A,m,d,m0,Ninv):
     return inv((grad.T*Ninv)@grad) # Return the covariance matrix
     
 
-"""MAIN"""
-# Initial guess for the parameters
-m0=np.asarray([69,0.022,0.12,0.06,2.1e-9,0.95])
-npars=len(m0) # number of parameters
-parnames=["Hubble constant H0","Baryon density","Dark matter density",
-        "Optical depth","Primordial amplitude","Primordial tilt"]
-planck=np.loadtxt('COM_PowerSpect_CMB-TT-full_R3.01.txt',skiprows=1)
-ell=planck[:,0]
-spec=planck[:,1]
-errs=0.5*(planck[:,2]+planck[:,3])
-Ninv=1/errs**2 # Inverse diagonal matrix of errors
+if __name__ == "__main__":
+    # Initial guess for the parameters
+    m0=np.asarray([69,0.022,0.12,0.06,2.1e-9,0.95])
+    npars=len(m0) # number of parameters
+    parnames=["Hubble constant H0","Baryon density","Dark matter density",
+            "Optical depth","Primordial amplitude","Primordial tilt"]
+    # Data
+    planck=np.loadtxt('COM_PowerSpect_CMB-TT-full_R3.01.txt',skiprows=1)
+    ell=planck[:,0]
+    spec=planck[:,1]
+    errs=0.5*(planck[:,2]+planck[:,3])
+    Ninv=1/errs**2 # Inverse diagonal matrix of errors
+    
+    pars=m0.copy()
+    chisq=get_chisq(pars,spec,errs,get_spectrum)
+    
+    
+    print(f"DEBUG: chi-squared evaluates to {chisq}")
+    
+    ## lets do some tests
+    #print("DEBUG: taking partial derivatives")
+    #for idx in range(npars):
+    #    partial=ndiff(f,pars/m0,idx)
+    #    print(f"DEBUG: partial_{idx} = {partial}")
+    
+    
+    
+    print("INFO: Newton iter")
+    print(f"\tchisq={get_chisq(pars,spec,errs,get_spectrum)}")
+    for i in range(4):
+        print(f"\nDEBUG: iteration {i+1}/4")
+        pars = newton_iter(get_spectrum,pars,spec,m0,Ninv)
+        print(f"\tchisq={get_chisq(pars,spec,errs,get_spectrum)}")
+        print(f"\tpars={pars}")
+    
+    # Get the covariance matrix
+    cov=get_covariance_matrix(get_spectrum,pars,spec,m0,Ninv)
+    sigma_pars=np.sqrt(np.diag(cov))
+    print("INFO: The best fit parameters are")
+    for parname,param,sigma in zip(parnames,pars,sigma_pars):
+        print(f"  {parname}\t{param:.3e} +- {sigma:.1e}")
+    
+    # Serialize parameters
+    print("INFO: Serializing parameters")
+    import json
+    with open("plank_fit_params.txt","w") as f:
+        json.dump({
+            "chisq":get_chisq(pars,spec,errs,get_spectrum),
+            "parnames":parnames,
+            "pars":list(pars),
+            "sigma_pars":list(sigma_pars),
+            "cov":[[i for i in j] for j in cov]
+            },f,indent=2)
 
-pars=m0.copy()
-chisq=get_chisq(pars,spec,errs)
-
-
-print(f"DEBUG: chi-squared evaluates to {chisq}")
-
-## lets do some tests
-#print("DEBUG: taking partial derivatives")
-#for idx in range(npars):
-#    partial=ndiff(f,pars/m0,idx)
-#    print(f"DEBUG: partial_{idx} = {partial}")
-
-
-
-print("INFO: Newton iter")
-print(f"\tchisq={get_chisq(pars,spec,errs)}")
-for i in range(2):
-    print(f"\nDEBUG: iteration {i}/4")
-    pars = newton_iter2(get_spectrum,pars,spec,m0,Ninv)
-    print(f"\tchisq={get_chisq(pars,spec,errs)}")
-    print(f"\tpars={pars}")
-
-# Get the covariance matrix
-cov=get_covariance_matrix(get_spectrum,pars,spec,m0,Ninv)
-sigma_pars=np.sqrt(np.diag(cov))
-print("INFO: The best fit parameters are")
-for parname,param,sigma in zip(parnames,pars,sigma_pars):
-    print(f"  {parname}\t{param:.3e} +- {sigma:.1e}")
-
-#with open("plank_fit_params.txt","w") as f:
-
-
-# stepsize=1.0e-6
-# print("INFO: Testing Nabla")
-# for i in range(10):
-#     nabla=numerical_grad(f,pars/m0)
-#     print("DEBUG: nabla",nabla)
-#     print("\tstepsize*nabla*m0",stepsize*nabla*m0)
-#     pars-=stepsize*nabla*m0
-#     print("\tpars",pars)
-#     print(f"DEBUG: chisq={get_chisq(pars,spec,errs)}")
 
 
 
