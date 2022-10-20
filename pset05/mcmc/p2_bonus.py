@@ -52,9 +52,9 @@ for i,dark_matter_density in enumerate(np.linspace(dark_matter_density0,0,niter)
     pars=newton_iter_subset(get_spectrum,pars,spec,m0,Ninv,idx_select)
     print(f"NI #3 Chisq={get_chisq(pars,spec,errs,get_spectrum)}")
 
-print("INFO: Newton iters to converge onto right value :5 iterations")
-for i in range(5):
-    print(f"#{i}",end=", ")
+print("INFO: Newton iters to converge onto right value")
+for i in range(15):
+    print(f"#{i+1}/15",end=", ")
     pars=newton_iter_subset(get_spectrum,pars,spec,m0,Ninv,idx_select)
     print(f"\tChisq={get_chisq(pars,spec,errs,get_spectrum)}")
 
@@ -72,7 +72,7 @@ dic_out={
     "sigma_pars":list(sigma_pars),
     "cov":[[i for i in j] for j in cov]
         }
-with open("plank_fit_params_nodm.txt") as f:
+with open("plank_fit_params_nodm.txt","w") as f:
     json.dump(dic_out,f,indent=2)
 print("\nDone")
 
