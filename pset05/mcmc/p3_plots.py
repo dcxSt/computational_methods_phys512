@@ -5,7 +5,10 @@ from matplotlib import pyplot as plt
 sqrt=np.sqrt
 
 # Load a chain 
-basename="2022-10-19T21:26:20.889518"
+#basename="2022-10-19T21:26:20.889518"
+#basename="2022-10-19T22:21:11.430998"
+#basename="2022-10-20T17:22:23.375177"
+#basename="2022-10-20T20:16:54.072785"
 pars =np.load(f"mcmcdata/{basename}_params.npy")
 chisq=np.load(f"mcmcdata/{basename}_chisq.npy")
 

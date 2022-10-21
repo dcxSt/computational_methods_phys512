@@ -55,7 +55,7 @@ def mcmc(d,A,m0,cov,errs,nstep,step_size):
                 chisq_next = chi_squared(m_next) # this can throw an error for edge cases
                 valid_param=True
             except Exception as e:
-                print("\nWARNING: \n{e}\n\nWARNING: Re-computing next step")
+                print(f"\nWARNING: \n{e}\n\nWARNING: Re-computing next step")
         delta_chisq = chisq_next - chisq
         p = np.exp(-0.5*delta_chisq)
         if np.random.rand() < p:
@@ -67,8 +67,16 @@ def mcmc(d,A,m0,cov,errs,nstep,step_size):
 
 # Get model parameters to init MCMC
 dic_in=json.load(open("plank_fit_params.txt","r"))
-pars=np.array(dic_in["pars"])
-m0=pars.copy()
+#pars=np.array(dic_in["pars"])
+#m0=pars.copy()
+import os
+filenames = os.listdir("./mcmcdata")
+filenames.sort()
+fname=filenames[-1]
+print(f"fname=./mcmcdata/{fname}")
+m0=np.load("./mcmcdata/"+fname)[-1,:]
+pars=m0.copy()
+print(f"m0={m0}")
 cov=np.array(dic_in["cov"])
 
 # Data
@@ -87,7 +95,7 @@ while True:
             m0=pars,
             cov=cov,
             errs=errs,
-            nstep=4000,
+            nstep=1000,
             step_size=1.0)
     params_trace,chisq_trace=np.array(params_trace),np.array(chisq_trace)
     
