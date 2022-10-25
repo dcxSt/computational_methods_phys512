@@ -35,16 +35,19 @@ def mcmc(d,A,m0,cov,errs,nstep,step_size):
         A trace of all chi-squared values computed along the way
     """
     # Define chi-squared function
-    def chi_squared(m):
-        return ((d-A(m)[:len(d)]).T/errs**2)@(d-A(m0)[:len(d)])
+    def get_chisq(m):
+        model=A(m)
+        model=model[:len(d)]
+        resid=d-model
+        return np.sum((resid/errs)**2)
     # Take Cholesky decomposition to speed things up
     cov_chol = np.linalg.cholesky(cov)
     # Compute chi-squared
-    m,chisq = m0.copy(),chi_squared(m0)
+    m,chisq = m0.copy(),get_chisq(m0)
     # Initiate data lists
     params_trace = [m] 
     chisq_trace   = [chisq]
-    chisq0=chi_squared(M0) # Trace
+    chisq0=get_chisq(M0) # Trace
     # Main loop, wonder around, explore the space
     for idx in range(1,nstep+1):
         print(f"\tStep {idx}/{nstep}")
@@ -59,12 +62,12 @@ def mcmc(d,A,m0,cov,errs,nstep,step_size):
                 randvec = np.random.normal(size=m.shape)
                 m_next = m + step_size*cov_chol@randvec
                 # Compute accept probability
-                chisq_next = chi_squared(m_next) # this can throw an error for edge cases
+                chisq_next = get_chisq(m_next) # this can throw an error for edge cases
                 valid_param=True
             except Exception as e:
                 print(f"\nWARNING: \n{e}\n\nWARNING: Re-computing next step")
         delta_chisq = chisq_next - chisq # if next chisq is bigger, it's less likely
-        p = np.exp(-delta_chisq) # if chisq is really big, it'll get small
+        p = np.exp(-0.5*delta_chisq) # if chisq is really big, it'll get small
         if np.random.rand() < p:
             m,chisq = m_next,chisq_next # Update parameters
         # Add step to the parameters list
@@ -105,7 +108,7 @@ while True:
             cov=cov,
             errs=errs,
             nstep=100,
-            step_size=1.0)
+            step_size=0.50)
     params_trace,chisq_trace=np.array(params_trace),np.array(chisq_trace)
     
     # Save results to hard disk
