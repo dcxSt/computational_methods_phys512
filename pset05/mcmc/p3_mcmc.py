@@ -4,6 +4,8 @@ from p2_newton import get_spectrum,get_chisq
 from matplotlib import pyplot as plt
 import datetime
 
+
+
 def mcmc(d,A,m0,cov,errs,nstep,step_size):
     """Computes MCMC of chi-squared given our model A(m,t)
 
@@ -42,9 +44,14 @@ def mcmc(d,A,m0,cov,errs,nstep,step_size):
     # Initiate data lists
     params_trace = [m] 
     chisq_trace   = [chisq]
+    chisq0=chi_squared(M0) # Trace
     # Main loop, wonder around, explore the space
     for idx in range(1,nstep+1):
         print(f"\tStep {idx}/{nstep}")
+        print(f"\t\tchisq     ={chisq}")
+        print(f"\t\tchisq_diff={chisq-chisq0} should be positive or small negative")
+        params_str=" ".join([f"{(i-i0)/i0:.1e}" for i,i0 in zip(m,M0)])
+        print(f"\t\tparams diff normalized={params_str}")
         valid_param=False
         while not valid_param:
             try:
@@ -56,8 +63,8 @@ def mcmc(d,A,m0,cov,errs,nstep,step_size):
                 valid_param=True
             except Exception as e:
                 print(f"\nWARNING: \n{e}\n\nWARNING: Re-computing next step")
-        delta_chisq = chisq_next - chisq
-        p = np.exp(-0.5*delta_chisq)
+        delta_chisq = chisq_next - chisq # if next chisq is bigger, it's less likely
+        p = np.exp(-delta_chisq) # if chisq is really big, it'll get small
         if np.random.rand() < p:
             m,chisq = m_next,chisq_next # Update parameters
         # Add step to the parameters list
@@ -67,16 +74,18 @@ def mcmc(d,A,m0,cov,errs,nstep,step_size):
 
 # Get model parameters to init MCMC
 dic_in=json.load(open("plank_fit_params.txt","r"))
-#pars=np.array(dic_in["pars"])
-#m0=pars.copy()
-import os
-filenames = os.listdir("./mcmcdata")
-filenames.sort()
-fname=filenames[-1]
-print(f"fname=./mcmcdata/{fname}")
-m0=np.load("./mcmcdata/"+fname)[-1,:]
-pars=m0.copy()
-print(f"m0={m0}")
+# Load the last element of the last chain
+pars=np.array(dic_in["pars"])
+m0=pars.copy()
+M0=m0.copy()
+#import os
+#filenames = os.listdir("./mcmcdata")
+#filenames.sort()
+#fname=filenames[-1]
+#print(f"fname=./mcmcdata/{fname}")
+#m0=np.load("./mcmcdata/"+fname)[-1,:]
+#pars=m0.copy()
+#print(f"m0={m0}")
 cov=np.array(dic_in["cov"])
 
 # Data
@@ -95,7 +104,7 @@ while True:
             m0=pars,
             cov=cov,
             errs=errs,
-            nstep=1000,
+            nstep=100,
             step_size=1.0)
     params_trace,chisq_trace=np.array(params_trace),np.array(chisq_trace)
     
@@ -104,6 +113,7 @@ while True:
     current_time = datetime.datetime.now().isoformat()
     np.save(f"mcmcdata/{current_time}_params.npy",params_trace)
     np.save(f"mcmcdata/{current_time}_chisq.npy",chisq_trace)
+    pars=params_trace[-1,:]
 
 # Print some stuff about the results
 print("INFO: MCMC sim metadata")
