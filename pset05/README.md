@@ -134,7 +134,7 @@ for i in range(11):
   pars=newton_iter(get_spectrum,pars,spec,m0)
 ```
 
-Unfortunately, due to roundoff errors most likely, our value wonders around the optimum a bit. 
+Unfortunately, our value wonders around the optimum a bit. This is probably because the function we are optimizing is not well behaved (smooth, parabolic) near the minimum. 
 
 *Bonus: The CMB is some of the best evidence we have for dark matter. What are the best-fit parameters with the dark-matter density set to zero? How does chi-squared compare tot he standard value? Note - getting this to converge can be tricky, so you might want to slowly step down the dark matter density to avoid crashes. If you get this to work, print the parameters/errors in `plank_fit_params_nodm.txt`*
 
@@ -227,7 +227,7 @@ def mcmc(d,A,m0,cov,errs,nstep,step_size):
     return params_trace,chisq_trace
 ```
 
-We get these parameters, which are in `plank_mcmc_fit_params.txt`. To get the best fit params, we trunkate the burn in and keep the long tail—so we throw out the first 40000 steps (see plot for justification). 
+We get these parameters, which are in `plank_mcmc_fit_params.txt` (not displayed here is also the cov matrix). To get the best fit params, we trunkate the burn in and keep the long tail—so we throw out the first 30000 steps (we choose 30000 as a reasonable estimate from our plot). 
 
 ```
 {
@@ -247,59 +247,19 @@ We get these parameters, which are in `plank_mcmc_fit_params.txt`. To get the be
     0.11908555436918732,
     2.34152678118161e-09,
     0.9869602906873022
-  ],
-  "cov": [
-    [
-      0.24712133192770125,
-      5.2980962995499536e-05,
-      -0.0004009475213016889,
-      0.0029051029395961822,
-      1.167109290452172e-11,
-      0.001049164562812164
-    ],
-    [
-      5.2980962995499536e-05,
-      3.781521338229975e-08,
-      -3.028053182414205e-08,
-      3.545623361698943e-07,
-      1.7021383397318287e-15,
-      3.048893918746243e-08
-    ],
-    [
-      -0.0004009475213016889,
-      -3.028053182414205e-08,
-      9.03882417536625e-07,
-      -5.535983165952137e-06,
-      -2.0705614952499348e-14,
-      -2.1431696337516354e-06
-    ],
-    [
-      0.0029051029395961822,
-      3.545623361698943e-07,
-      -5.535983165952137e-06,
-      0.000654279812610202,
-      2.984812770443628e-12,
-      3.1489410744319826e-05
-    ],
-    [
-      1.167109290452172e-11,
-      1.7021383397318287e-15,
-      -2.0705614952499348e-14,
-      2.984812770443628e-12,
-      1.367658856392093e-20,
-      1.2648543091808019e-13
-    ],
-    [
-      0.001049164562812164,
-      3.048893918746243e-08,
-      -2.1431696337516354e-06,
-      3.1489410744319826e-05,
-      1.2648543091808019e-13,
-      1.3659259271214808e-05
-    ]
   ]
 }
 ```
+
+We can tell our chain has converged by observing that the lower frequencies look like white noise. 
+
+![all_params_fft](https://user-images.githubusercontent.com/21654151/198725023-5c5db8e9-d13e-4979-aafe-3a55cbd2da68.png)
+
+![all_params](https://user-images.githubusercontent.com/21654151/198724988-31fad741-ae70-4eb7-ae71-f3fdfd7e2470.png)
+
+
+![covmat_mcmc](https://user-images.githubusercontent.com/21654151/198724967-5a4ed4e0-933f-4476-81ea-4c800407c3a8.png)
+
 
 
 
