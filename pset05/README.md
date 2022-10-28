@@ -329,12 +329,9 @@ After importance sampling, our best fit parameters (saved to `plank_mcmc_importa
 }
 ```
 
-Our new normalized covariance matrix looks like this
+Our new normalized covariance matrix looks like this, it's a bit different than the last one, in general there's slightly less dependence, especially in the optical depth col/row. 
 
-
-
-
-
+![covmat_importance_mcmc](https://user-images.githubusercontent.com/21654151/198750494-771b402e-5968-4036-9bed-4fa14c95ba0a.png)
 
 **New Chain**
 
