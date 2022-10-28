@@ -351,7 +351,12 @@ def get_chisq(m):
     return np.sum((resid/errs)**2) + chisq_tau
 ```
 
-This chain converged faster. We compute the expected values for the parameters and the new covariance matrix. 
+This chain converged faster. It looks like our random walker is wondering around the minimum of a nicely behaved parabola. We compute the expected values for the parameters and the new covariance matrix. 
+
+![all_params_p4](https://user-images.githubusercontent.com/21654151/198751600-43b022cc-3be1-4cc0-9ec6-ddf70b458ce4.png)
+![all_params_fft_p4](https://user-images.githubusercontent.com/21654151/198751616-ecc262f9-9213-40e5-a2c4-4bb058b026fd.png)
+
+
 
 
 
