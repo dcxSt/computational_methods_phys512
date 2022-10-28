@@ -153,7 +153,7 @@ iterate newton's method until converged
 ## 3) 
 *Estimate the parameter values and uncertainties using an MCMC sampler you write yourself. I strongly suggest you draw your trial steps from the curvature matrix you generated in Problem 2. Save your chain (includig the chi-squared value for each smaple in the first column) in `plank_chain.txt`*
 
-Code for this problem is in `p3_mcmc.py`. Then I use the script `/mcmcdata/npy_to_txt.py` to put my data into the format asked for (in `plank_chain.txt`) (although I don't want to commit this because it's a 28M file...), and also to get the best fit params, which I will definitely commit, and can be found in json format in `plank_mcmc_fit_params.txt`. 
+Code for this problem is in `p3_mcmc.py`. Then I use the script `/mcmcdata/npy_to_txt.py` to put my data into the format asked for (in `mcmcdata/plank_chain.txt`), and also to get the best fit params, which I will definitely commit, and can be found in json format in `plank_mcmc_fit_params.txt`. 
 
 Here is the mcmc algorithm
 
