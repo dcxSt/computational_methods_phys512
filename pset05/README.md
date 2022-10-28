@@ -253,6 +253,16 @@ We get these parameters, which are in `plank_mcmc_fit_params.txt` (not displayed
 
 We can tell our chain has converged by observing that the lower frequencies look like white noise. 
 
+The dark matter density times h-squared is `0.1116 +- 9.5e-4`. To get the actual dark-matter density we divide by h-squared, which is H0/100. `H0 = 71.0 +- 0.25`, so `h = 0.710 +- 0.0025`. We can approximate the square and std of the square by `sigma_hsq = 2*sigma_h*h` to first order, `h^2 = 0.504 +- 0.0035`. Now, to get the dark-matter density we divide our original number by `h^2`, keeping only highest order terms to estimate our uncertainty 
+
+```
+Omega \approx \Omega_hsq/hsq \pm (sigma_omega_hsq + sigma_hsq)/hsq
+Omega = 0.1116/0.504 +- (0.0035 + 9.5e-4)/0.504
+      = 0.221 +- 0.0088
+```
+
+
+
 ![all_params_fft](https://user-images.githubusercontent.com/21654151/198725023-5c5db8e9-d13e-4979-aafe-3a55cbd2da68.png)
 
 ![all_params](https://user-images.githubusercontent.com/21654151/198724988-31fad741-ae70-4eb7-ae71-f3fdfd7e2470.png)
@@ -261,6 +271,90 @@ We can tell our chain has converged by observing that the lower frequencies look
 ![covmat_mcmc](https://user-images.githubusercontent.com/21654151/198724967-5a4ed4e0-933f-4476-81ea-4c800407c3a8.png)
 
 
+## 4)
+
+**Importance Sampling**
+
+We use importance sampling by weighting the averages with the ratio of likelyhoods of our original loss function with the one that includes the new prior on tau. The ratio is just the exponential of `-0.5` times our prior componant of our new chi-squared function, which we assume to be a quadratic, as it's a good assumption to make that our tau likelyhood, obtained from polarization data, is normally distributed. This is done in the code snippet below, which can be found in `p4_importance_sampling.py`. We use importance sampling  `plank_mcmc_importance_params.txt`. 
+
+```python
+# Determine weights for importance sampling
+def get_weights(pars):
+    tau=pars[:,3] # sampled taus
+    tau_bar=0.0540 # prior on tau 
+    tau_sig=0.0074 # prior sigma on tau
+    # Ratio of likelyhoods is just our extra prior
+    weights=np.exp(-0.5*((tau-tau_bar)/tau_sig)**2)
+    return weights
+```
+
+The covariance of two parameters can be estimated like so
+
+```python
+pars_i=pars[:,i]
+pars_j=pars[:,j]
+mu_i=np.average(pars_i,weights)
+mu_j=np.average(pars_j,weights)
+cov_ij=np.average((pars_i-mu_i)*(pars_j-mu_j),weights=weights)
+```
+
+After importance sampling, our best fit parameters (saved to `plank_mcmc_importance.txt`) are as follows:
+
+```
+{
+  "parnames": [
+    "Hubble constant H0",
+    "Baryon density",
+    "Dark matter density",
+    "Optical depth",
+    "Primordial amplitude",
+    "Primordial tilt"
+  ],
+  "pars": [
+    70.62405203154053,
+    0.022636048025946476,
+    0.1123185875192795,
+    0.05784293762241056,
+    2.0747648182055052e-09,
+    0.9840587922443713
+  ],
+  "vars": [
+    0.4143958180902279,
+    3.953675332107864e-08,
+    1.5217522491607208e-06,
+    5.244406228349512e-05,
+    9.34928436145934e-22,
+    1.5791032739638025e-05
+  ]
+}
+```
+
+Our new normalized covariance matrix looks like this
+
+
+
+
+
+
+**New Chain**
+
+To constrain tau, we need only modify our chi-squared function as such
+
+```python
+def get_chisq(m):
+    """Takes model param, uses environment for A and d"""
+    model=A(m)
+    model=model[:len(d)]
+    resid=d-model
+    # Constrain Tau
+    tau=m[3]
+    taubar=0.0540 # prior for tau
+    tausig=0.0074 # prior sigma for tau
+    chisq_tau=((tau-taubar)/tausig)**2
+    return np.sum((resid/errs)**2) + chisq_tau
+```
+
+This chain converged faster. We compute the expected values for the parameters and the new covariance matrix. 
 
 
 

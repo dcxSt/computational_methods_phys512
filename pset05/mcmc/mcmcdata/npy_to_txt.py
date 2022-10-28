@@ -28,6 +28,10 @@ for pars,chi in zip(parsdata,chidata):
 #chisq=np.load(f"mcmcdata/{basename}_chisq.npy")
 pars=np.hstack(parsdata)
 chisq=np.hstack(chidata)
+# Trunkate the signal, throw out burn in, keep tail
+burn_in_idx=30000 # obtained from eyeballing plot
+pars,chisq=pars[:,burn_in_idx:],chisq[burn_in_idx:]
+
 print("COMBINED")
 print(f"pars shape {pars.shape}")
 print(f"chisq shape {chisq.shape}")
@@ -73,7 +77,7 @@ with open("../plank_mcmc_fit_params.txt","w") as f:
 print("INFO: dumping data arrays into txt")
 
 print(f"pars.shape={pars.shape}, chisq.shape={chisq.shape}")
-np.savetxt("plank_chain.txt",np.vstack([chisq,pars]))
+np.savetxt("plank_chain.txt",np.vstack([chisq,pars]).T)
 
 
 

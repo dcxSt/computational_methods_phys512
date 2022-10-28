@@ -171,7 +171,7 @@ if __name__ == "__main__":
     
     print("INFO: Newton iter")
     print(f"\tchisq={get_chisq(pars,spec,errs,get_spectrum)}")
-    for i in range(4):
+    for i in range(8):
         print(f"\nDEBUG: iteration {i+1}/4")
         pars = newton_iter(get_spectrum,pars,spec,m0,Ninv)
         print(f"\tchisq={get_chisq(pars,spec,errs,get_spectrum)}")

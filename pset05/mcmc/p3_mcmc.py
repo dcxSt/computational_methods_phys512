@@ -56,6 +56,10 @@ def mcmc(d,A,m0,cov,errs,nstep,step_size):
         params_str=" ".join([f"{(i-i0)/i0:.1e}" for i,i0 in zip(m,M0)])
         print(f"\t\tparams diff normalized={params_str}")
         valid_param=False
+        # This while loop is so that the program doesn't crash if our 
+        # random walker wonders too far. Mathematically, this is
+        # equivalent to putting infinite heavy-side at the boundary of
+        # where our loss function is valid
         while not valid_param:
             try:
                 # Update param
@@ -78,18 +82,20 @@ def mcmc(d,A,m0,cov,errs,nstep,step_size):
 # Get model parameters to init MCMC
 dic_in=json.load(open("plank_fit_params.txt","r"))
 # Load the last element of the last chain
-pars=np.array(dic_in["pars"])
-m0=pars.copy()
-M0=m0.copy()
-#import os
-#filenames = os.listdir("./mcmcdata")
-#filenames.sort()
+#pars=np.array(dic_in["pars"])
+#m0=pars.copy()
+
+import os
+filenames = os.listdir("./mcmcdata")
+filenames.sort()
 #fname=filenames[-1]
-#print(f"fname=./mcmcdata/{fname}")
-#m0=np.load("./mcmcdata/"+fname)[-1,:]
-#pars=m0.copy()
-#print(f"m0={m0}")
-cov=np.array(dic_in["cov"])
+fname=filenames[-3]
+print(f"fname=./mcmcdata/{fname}")
+m0=np.load("./mcmcdata/"+fname)[-1,:]
+pars=m0.copy() 
+cov=np.array(dic_in["cov"]) # Covariance matrix
+
+M0=m0.copy() # debug
 
 # Data
 planck=np.loadtxt('COM_PowerSpect_CMB-TT-full_R3.01.txt',skiprows=1)
