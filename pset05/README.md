@@ -357,6 +357,7 @@ This chain converged faster. It looks like our random walker is wondering around
 ![all_params_fft_p4](https://user-images.githubusercontent.com/21654151/198838717-4f1c05a4-c524-4712-a6be-f04267683bcf.png)
 
 
+```
 {
   "chisq": 2577.0647514132284,
   "parnames": [
@@ -384,7 +385,7 @@ This chain converged faster. It looks like our random walker is wondering around
     2.919748105800757e-05
   ]
 }
-
+```
 
 
 
