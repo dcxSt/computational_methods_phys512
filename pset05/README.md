@@ -357,8 +357,33 @@ This chain converged faster. It looks like our random walker is wondering around
 ![all_params_fft_p4](https://user-images.githubusercontent.com/21654151/198751616-ecc262f9-9213-40e5-a2c4-4bb058b026fd.png)
 
 
-
-
+{
+  "chisq": 2577.143041695086,
+  "parnames": [
+    "Hubble constant H0",
+    "Baryon density",
+    "Dark matter density",
+    "Optical depth",
+    "Primordial amplitude",
+    "Primordial tilt"
+  ],
+  "pars": [
+    68.02785694680009,
+    0.022357029515514982,
+    0.1182358297111866,
+    0.056604430469777464,
+    2.0992499588342908e-09,
+    0.9715382261051455
+  ],
+  "var": [
+    0.8661331513430923,
+    4.27212795174603e-08,
+    4.237193864973371e-06,
+    4.8225857920663594e-05,
+    8.652086714401919e-22,
+    2.4877785638977024e-05
+  ]
+}
 
 
 
