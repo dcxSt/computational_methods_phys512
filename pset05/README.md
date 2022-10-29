@@ -351,14 +351,14 @@ def get_chisq(m):
     return np.sum((resid/errs)**2) + chisq_tau
 ```
 
-This chain converged faster. It looks like our random walker is wondering around the minimum of a nicely behaved parabola. We compute the expected values for the parameters and the new covariance matrix. 
+This chain converged faster. It looks like our random walker is wondering around the minimum of a nicely behaved parabola. We compute the expected values for the parameters and the new covariance matrix. Below are the data collected from the chain in simulation-time and simulation-frequency space, and the best fit parameters with the variance. It's pretty clear from the fourier-space plots that our chain has converged. (data is in `./mcmcdata/tauconstrain/plank_chain_tauprior.txt` and best fit params & cov matrix in `./plank_mcmc_fit_params_p4.txt`)
 
-![all_params_p4](https://user-images.githubusercontent.com/21654151/198751600-43b022cc-3be1-4cc0-9ec6-ddf70b458ce4.png)
-![all_params_fft_p4](https://user-images.githubusercontent.com/21654151/198751616-ecc262f9-9213-40e5-a2c4-4bb058b026fd.png)
+![all_params_p4](https://user-images.githubusercontent.com/21654151/198838713-0f8ffc86-9f08-4a32-8402-c4c962292da3.png)
+![all_params_fft_p4](https://user-images.githubusercontent.com/21654151/198838717-4f1c05a4-c524-4712-a6be-f04267683bcf.png)
 
 
 {
-  "chisq": 2577.143041695086,
+  "chisq": 2577.0647514132284,
   "parnames": [
     "Hubble constant H0",
     "Baryon density",
@@ -368,20 +368,20 @@ This chain converged faster. It looks like our random walker is wondering around
     "Primordial tilt"
   ],
   "pars": [
-    68.02785694680009,
-    0.022357029515514982,
-    0.1182358297111866,
-    0.056604430469777464,
-    2.0992499588342908e-09,
-    0.9715382261051455
+    67.76362552444414,
+    0.022298680349415703,
+    0.11874651228706515,
+    0.05557408100166258,
+    2.0970066235465962e-09,
+    0.9704086686625137
   ],
   "var": [
-    0.8661331513430923,
-    4.27212795174603e-08,
-    4.237193864973371e-06,
-    4.8225857920663594e-05,
-    8.652086714401919e-22,
-    2.4877785638977024e-05
+    0.9619977319925965,
+    4.527710024222406e-08,
+    4.9544546141776225e-06,
+    5.316900401366228e-05,
+    9.987691292264381e-22,
+    2.919748105800757e-05
   ]
 }
 
