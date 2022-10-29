@@ -46,7 +46,9 @@ The chi-squared value for these parameters is `3272.2036739044693`. This is an i
 
 No it's not a good fit, since our chi-squared (3272) is significantly above the number of degrees of freedom (2501). 
 
-*2) Use Newton's method or Levenberg-Marquardt to find the best-fit parameters, using numerical derivatives. Your code should report your best fit parameters and their errors in `plank_fit_params.txt`. Please write your own fitter/numerical-derivative-taker rather than stealing one. Note - you will want to keep track of the curvature matrix at the best-fit value for th enext problem.*
+# 2)
+
+*Use Newton's method or Levenberg-Marquardt to find the best-fit parameters, using numerical derivatives. Your code should report your best fit parameters and their errors in `plank_fit_params.txt`. Please write your own fitter/numerical-derivative-taker rather than stealing one. Note - you will want to keep track of the curvature matrix at the best-fit value for th enext problem.*
 
 To do this fit, we need to take gradients, for which we need to take partial derivatives. We do so using the following code. 
 
