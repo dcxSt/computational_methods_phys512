@@ -63,7 +63,6 @@ def ndiff(f,x,idx):
     # idx, at x
     return (f(x+step_h) - f(x-step_h))/(2*dx)
 
-
 def numerical_grad(A,m,t):
     """Numerically compute the gradiant of A wrt m at m,t
 
@@ -101,7 +100,7 @@ def newton_iter_numerical(A,m,t,d):
     """
     r=d-A(m,t) # residuals
     Ap=numerical_grad(A,m,t)
-    return m + inv(Ap.T@Ap)@Ap.T@r # Ninv's cancel
+    return m + inv(Ap.T@Ap)@Ap.T@r # Ninv's cancel (do they??)
 
 def mcmc(d,A,m0,t,cov,sigma,nstep,step_size):
     """Computes MCMC of chi-squared given our model A(m,t)
