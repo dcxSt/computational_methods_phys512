@@ -50,5 +50,26 @@ def correlation_pad(u,v):
 
 ## 4) 
 
+**(a)** Show that
+
+$$
+\sum_{x=0}^{N-1} \exp(-2\pi ikx/N) = \frac{1 - \exp(-2\pi i k)}{1 - \exp(-2\pi ik/N)}
+$$
+
+To see this, we multiply the left hand side by the denominator of the right
+
+$$
+(1 - e^{-2\pi ik/N})\sum_{x=0}^{N-1}e^{-2\pi ikx/N} 
+= \sum_x e^{-2\pi ikx/N} - \sum_x e^{-2\pi ik(x+1)/N}
+$$
+
+Observe that terms from the left sum match with terms from of the right sum as we iterate through x. Only the first term from the left sum, which is $e^{-2\pi ik\cdot 0/N}=1$ and the final term from the right sum do not cancel $e^{-2\pi ikN/N} = e^{-2\pi ik}$
+
+Therefore
+
+$$
+(1-e^{-2\pi ik/N})\cdot \sum_{x=0}^{N-1}e^{-2\pi ikx/N} = 1 - e^{-2\pi i k}
+$$
+
 
 
