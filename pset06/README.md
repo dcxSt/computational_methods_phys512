@@ -60,7 +60,7 @@ To see this, we multiply the left hand side by the denominator of the right
 
 $$
 (1 - e^{-2\pi ik/N})\sum_{x=0}^{N-1}e^{-2\pi ikx/N} 
-= \sum_x e^{-2\pi ikx/N} - \sum_x e^{-2\pi ik(x+1)/N}
+= \sum_{x=0}^{N-1} e^{-2\pi ikx/N} - \sum_{x=0}^{N-1} e^{-2\pi ik(x+1)/N}
 $$
 
 Observe that terms from the left sum match with terms from of the right sum as we iterate through x. Only the first term from the left sum, which is $e^{-2\pi ik\cdot 0/N}=1$ and the final term from the right sum do not cancel $e^{-2\pi ikN/N} = e^{-2\pi ik}$
@@ -70,6 +70,41 @@ Therefore
 $$
 (1-e^{-2\pi ik/N})\cdot \sum_{x=0}^{N-1}e^{-2\pi ikx/N} = 1 - e^{-2\pi i k}
 $$
+
+
+**(b)**
+
+As $k\to 0$ we have
+
+$$
+\lim_{k\to 0}\frac{1 - \exp(-2\pi ik)}{1 - \exp(-2\pi ik/N)} = 
+\lim_{k\to 0}\frac{\frac{d}{dk}(1 - \exp(-2\pi ik))}{\frac{d}{dk}(1 - \exp(-2\pi ik/N))} = 
+\lim_{k\to 0}\frac{2\pi i \exp^{-2\pi ik}}{2\pi i/N \exp(-2\pi i k/N)} = 
+N
+$$
+
+For non multiple of $N$ integers $k$, the numerator is clearly zero, thus we have
+
+$$
+\frac{1 - \exp(-2\pi i(k \text{ mod } 1))}{1 - \exp(-2\pi i(k \text{ mod } N)/N)} 
+= \frac{\text{zero}}{\text{not zero}} 
+= 0
+$$
+
+
+**(c)** 
+
+A sine wave with wave-length $1/k$ is the imaginary componant of $\exp{2\pi ik_0x}$, a cos wave is the real componant. 
+
+So the FFT of such a wave is
+
+$$
+\sum_{x=0}^{N-1}\exp(-2\pi i(k-k_0)x/N) = \frac{1-\exp(-2\pi i(k-k_0))}{1 - \exp(-2\pi i(k-k_0)/N)}
+$$
+
+TODO: plot here
+
+
 
 
 
