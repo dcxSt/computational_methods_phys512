@@ -79,7 +79,7 @@ As $k\to 0$ we have
 $$
 \lim_{k\to 0}\frac{1 - \exp(-2\pi ik)}{1 - \exp(-2\pi ik/N)} = 
 \lim_{k\to 0}\frac{\frac{d}{dk}(1 - \exp(-2\pi ik))}{\frac{d}{dk}(1 - \exp(-2\pi ik/N))} = 
-\lim_{k\to 0}\frac{2\pi i \exp^{-2\pi ik}}{2\pi i/N \exp(-2\pi i k/N)} = 
+\lim_{k\to 0}\frac{2\pi i \exp(-2\pi ik)}{2\pi i/N \exp(-2\pi i k/N)} = 
 N
 $$
 
@@ -102,7 +102,48 @@ $$
 \sum_{x=0}^{N-1}\exp(-2\pi i(k-k_0)x/N) = \frac{1-\exp(-2\pi i(k-k_0))}{1 - \exp(-2\pi i(k-k_0)/N)}
 $$
 
-TODO: plot here
+TODO: plot leakage here
+
+**(d)**
+
+*A common tool to get around leakage is the use of window functions. The leakage essentially comes from the fact that we have a sharp jump at the edge of the inveral. If we multiply our input data by a function that goes to zero at the edges, this cancels out the jump, and so prevents the leakage from the jumpas at the edges. Of course, since we have multiplied by the window in real space, we have convolved by it in Fourier space. Once simple window we could use is $0.5-0.5\cos(2\pi x/N)$ (there are many, many choices). Show that when we multiply by this window, the spectral leakage for a non-integer period sine wave drops dramatically.*
+
+TODO: plot leakage with window
+
+**(e)**
+
+*Show that the Fourier transform of the window is* $[N/2,N/4,0,\cdots,0,N/4]$
+
+Let $w$ denote the window vector `0.5-0.5*np.cos(2*np.pi*np.arange(N)/N)`. Then it's FT is
+
+$$
+\begin{align*}
+W \equiv Fw &= \sum_{x=0}^{N-1}\exp(-2\pi ix\xi/N) \left(\frac{1}{2} - \frac{1}{2}\cos(2\pi x/N)\right)\\
+            &= \sum_{x=0}^{N-1} \exp(-2\pi ix\xi/N) \left(\frac{1}{2} - \frac{1}{4}\exp(-2\pi ix/N) - \frac{1}{4}\exp(2\pi ix/N) \right)\\
+            &= \frac{1}{2}\sum_{x=0}^{N-1}\exp(-2\pi ix\xi/N) - \frac{1}{4}\sum_{x=0}^{N-1}\exp(-2\pi ix(\xi-1)/N) - \frac{1}{4}\sum_{x=0}^{N-1}\exp(-2\pi ix(\xi+1)/N)\\
+            &= \delta(\xi)N/2 - \delta(\xi-1)N/4 - \delta(\xi+1\,\text{ mod }N)N/4
+\end{align*}
+$$
+
+It follows from the convolution theorem tells us that the FT of pointwise multiplication of arrays $w$ and $x$ is the convolution of their fourier transforms.
+
+$$
+F(w\cdot x) = W\ast X
+$$
+
+Since $W$ only has three terms in it, we can easily perform this convolution like so
+
+```python
+X=np.fft.fft(x)
+windowed_fft_x = X/2-np.roll(X/4,1)-np.roll(X/4,-1)
+```
+
+
+
+
+
+
+
 
 
 
