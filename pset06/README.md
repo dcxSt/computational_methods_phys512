@@ -13,7 +13,7 @@ def dftshift(arr:np.ndarray, x0:int):
     return shifted
 ```
 
-TODO: plot
+![p1_gaussian](https://user-images.githubusercontent.com/21654151/199855804-3d7692ec-3de8-455c-aeb4-a057f72eb3d3.png)
 
 
 ## 2)
@@ -33,7 +33,8 @@ def autocorr_shifted(u, shift):
     return correlation(u,u_shifted)
 ```
 
-TODO: put plot here
+![p1_correlations_of_gaussians](https://user-images.githubusercontent.com/21654151/199855822-f2230cbe-e1ed-4d13-aa59-eaaa5b7ec0ee.png)
+
 
 ## 3)
 
@@ -102,13 +103,15 @@ $$
 \sum_{x=0}^{N-1}\exp(-2\pi i(k-k_0)x/N) = \frac{1-\exp(-2\pi i(k-k_0))}{1 - \exp(-2\pi i(k-k_0)/N)}
 $$
 
-TODO: plot leakage here
+![freqency_leaking](https://user-images.githubusercontent.com/21654151/199855882-b2a6376c-4296-422e-bb08-a8da58cde4a1.png)
+
 
 **(d)**
 
 *A common tool to get around leakage is the use of window functions. The leakage essentially comes from the fact that we have a sharp jump at the edge of the inveral. If we multiply our input data by a function that goes to zero at the edges, this cancels out the jump, and so prevents the leakage from the jumpas at the edges. Of course, since we have multiplied by the window in real space, we have convolved by it in Fourier space. Once simple window we could use is $0.5-0.5\cos(2\pi x/N)$ (there are many, many choices). Show that when we multiply by this window, the spectral leakage for a non-integer period sine wave drops dramatically.*
 
-TODO: plot leakage with window
+![freqency_leaking_windowed](https://user-images.githubusercontent.com/21654151/199855917-da37f26d-10b6-4f14-8b38-6a3f8c08d7b0.png)
+
 
 **(e)**
 
