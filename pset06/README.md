@@ -115,7 +115,7 @@ $$
 
 **(e)**
 
-*Show that the Fourier transform of the window is* $[N/2,N/4,0,\cdots,0,N/4]$
+*Show that the Fourier transform of the window is* `[N/2,N/4,0,\cdots,0,N/4]`.
 
 Let $w$ denote the window vector `0.5-0.5*np.cos(2*np.pi*np.arange(N)/N)`. Then it's FT is
 
@@ -128,10 +128,15 @@ W \equiv Fw &= \sum_{x=0}^{N-1}\exp(-2\pi ix\xi/N) \left(\frac{1}{2} - \frac{1}{
 \end{align*}
 $$
 
+Therefore our array is `[N/2,-N/4,0,...,0,-N/4]`.
+
+*Use this to show that you can get the windowed FT by appropriate combinations of each point in the unwindowed FT and it's immediate neighbors*
+
 It follows from the convolution theorem tells us that the FT of pointwise multiplication of arrays $w$ and $x$ is the convolution of their fourier transforms.
 
 $$
-F(w\cdot x) = W\ast X
+F^{-1}(W\ast X) = F^{-1}(W)\cdot F^{-1}(X) = w\cdot x\\
+\Rightarrow F(w\cdot x) = W\ast X
 $$
 
 Since $W$ only has three terms in it, we can easily perform this convolution like so

@@ -53,9 +53,10 @@ if __name__ == "__main__":
     shifts=(16,32,64,128)
     for shift in shifts:
         plt.plot(autocorr_shifted(arr,shift),label=f"shifted by {shift}")
-    plt.title("corr gaussian with its self")
+    plt.title("Correlations of gaussians with themselves")
     plt.legend()
     plt.tight_layout()
+    plt.savefig("./img/p1_correlations_of_gaussians.png")
     plt.show(block=True)
     plt.pause(0.2)
 
