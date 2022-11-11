@@ -147,6 +147,107 @@ windowed_fft_x = X/2-np.roll(X/4,1)-np.roll(X/4,-1)
 ```
 
 
+## 5)
+
+*Match Filter of LIGO data. We are going to find gravitational waves! Key will be getting LIGO data from github: [https://github.com/losc-tutorial/LOSC_Event_tutorial](https://github.com/losc-tutorial/LOSC_Event_tutorial).*
+
+*While they include code to do much of this, please don't use it (although you may look at it for inspiration) and instead write your own. You can look at/use `simple_read_ligo.py` that I have posted for concise code to read the hdf5 files. Feel free to have your code loop over the events and print the answer to each part for that event. In order to make our life easy, in case we have to re-run your code, please also have a variable at the top of your code that sets the directory where you have unzipped the data. LIGO has two detectors (in Livingstone, Louisiana, and Hanford, Washington) and GW events need to be seen by both detectors to be considered rea. Note that my `read_template` functions returns the templates for both the plus and cross polarizations, but for simplicity you can just pick one of them to work with.*
+
+**(a)**
+*Come up with a noise model for the Livingston and Hanford detectors seperately. Describe in comments how you go about doing this. Please mention something about how you smooth the power spectrum and how you deal with lines (if at all). Please also explain how you window the data (you may wat to use a window that has an extended flat period near the center to avoid tapering the data/template where the signal is not small).*
+
+We assume that the noise model is stationary
+
+$$\langle f(x)f(x+\delta)\rangle = \langle g(\delta)\rangle$$
+
+and then use the Wiener-Khinchin theorem, which says that the noise's power spectrum is the FT of $f$'s correlation function.
+
+$$F\{N\} = |F\{S\}|^2$$
+
+Therefore, the FT of the strain (abs squared) is our noise model. Let's implement:
+
+We skip the `read_file` and `read_template` code that we have been give. First we import the windows that we need and establish a few conventional shortcuts.
+
+```python
+import numpy as np
+from numpy.fft import rfft
+import os
+from os.path import join as pathjoin
+import matplotlib.pyplot as plt
+import h5py
+import json
+import scipy
+from scipy.signal.windows import nuttall,hann,tukey,cosine,bartlett,blackman
+
+# Custom window
+flat=np.ones # we use this as moving-average kernel
+root="./LOSC_Event_tutorial/"  # ligo data root directory (relative path)
+```
+
+Lets load and pack up the events metadata into a handy dictionary to use later
+
+```python
+# Load event metadata
+events=json.load(open(pathjoin(root,'BBH_events_v3.json')))
+# Fill dictionaries with all we need
+hanford={}    # hanford detector data
+livingston={} # livingston detector data
+for e in events:
+    # Hanford detector params
+    strain,dt,utc = read_file(pathjoin(root,events[e]['fn_H1']))
+    hanford[e]={"strain":strain,"dt":dt,"utc":utc}
+    # Livingston detector params
+    strain,dt,utc = read_file(pathjoin(root,events[e]['fn_L1']))
+    livingston[e]={"strain":strain,"dt":dt,"utc":utc}
+```
+
+This function computes the PSD for us
+
+```python
+def get_psd(arr,window=None):
+    """Get the psd of an array, optionally takes window func"""
+    if window is not None:
+        w_arr=window(len(arr)) # make window array
+        arr_ft=rfft(arr*w_arr)
+    else:
+        arr_ft=rfft(arr)
+    psd=np.abs(arr_ft)**2
+    return psd
+```
+
+Now we compute and smooth the PSD for each event. We don't explicitly deal with the spikes, but instead, are mindful not to set the smoothing width to large so that the spikes aren't spread out too much. 
+
+```python
+window=hann # Select a windowing function to prevent leaking
+width_smooth=20 # The width of the smoothing kernel
+ker,ker_name=hann(width_smooth),"Hann" # smoothing kernel is window(width)
+smooth = lambda x:np.convolve(x,ker,'same') # smoothing funciton
+
+for e in events:
+    # Load Hanford data
+    strain,dt,utc = read_file(pathjoin(root,events[e]['fn_H1']))
+    psd_h=get_psd(strain,window) # Hanford PSD
+    # Load Livingston data
+    strain,dt,utc = read_file(pathjoin(root,events[e]['fn_L1']))
+    psd_l=get_psd(strain,window) # Livingston PSD
+    # Plot them and compare (ommited)
+```
+
+
+
+
+**(b)**
+*Use that noise model to search the four sets of events using a matched filter. The mapping between data and templates can be founmd in the file `BBH_events_v3.json`, included in the zipfile.*
+
+**(c)**
+*Estimate a noise for each event and from the output of the matched filter, give a signal-to-noise ratio for each event, both from the individual detectors, and from the combined Livingston + Hanford events.* 
+
+**(d)**
+*Compare the signal-to-noise you get from the scatter int he matched filter to the analytic signal-to-noise you expect from your noise model. How close are they? If they disagree, can you explain why?*
+
+
+
+
 
 
 
