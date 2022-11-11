@@ -184,23 +184,6 @@ flat=np.ones # we use this as moving-average kernel
 root="./LOSC_Event_tutorial/"  # ligo data root directory (relative path)
 ```
 
-Lets load and pack up the events metadata into a handy dictionary to use later
-
-```python
-# Load event metadata
-events=json.load(open(pathjoin(root,'BBH_events_v3.json')))
-# Fill dictionaries with all we need
-hanford={}    # hanford detector data
-livingston={} # livingston detector data
-for e in events:
-    # Hanford detector params
-    strain,dt,utc = read_file(pathjoin(root,events[e]['fn_H1']))
-    hanford[e]={"strain":strain,"dt":dt,"utc":utc}
-    # Livingston detector params
-    strain,dt,utc = read_file(pathjoin(root,events[e]['fn_L1']))
-    livingston[e]={"strain":strain,"dt":dt,"utc":utc}
-```
-
 This function computes the PSD for us
 
 ```python
@@ -218,6 +201,9 @@ def get_psd(arr,window=None):
 Now we compute and smooth the PSD for each event. We don't explicitly deal with the spikes, but instead, are mindful not to set the smoothing width to large so that the spikes aren't spread out too much. 
 
 ```python
+# Load event metadata
+events=json.load(open(pathjoin(root,'BBH_events_v3.json')))
+
 window=hann # Select a windowing function to prevent leaking
 width_smooth=20 # The width of the smoothing kernel
 ker,ker_name=hann(width_smooth),"Hann" # smoothing kernel is window(width)
@@ -242,6 +228,52 @@ for e in events:
 
 **(b)**
 *Use that noise model to search the four sets of events using a matched filter. The mapping between data and templates can be founmd in the file `BBH_events_v3.json`, included in the zipfile.*
+
+The matched filter works by cross-correlating a signal template with data. If our template is $A$ and $m$ is the (only) parameter of our model (template), and we have a good noise model $N$, then the chi-squared value of our parameter is
+
+$$\chisq=(d-Am)^TN^{-1}(d-Am)$$
+
+We can exploit the stationarity of the noise to simplify this expression and solve for $m$
+
+$$m(\tau) = (A(t-\tau)^TN^{-1}d)/(A(t-\tau)^TN^{-1}A(t-\tau))$$
+
+We can ditch the denominator and simplify (which is constant, since $N$ is stationary) to obtain a relative most-likely amplitude
+
+$$f \equiv (N^{-1}A(t-\tau))^Td \Rightarrow \tilde f = \tilde A^\ast \tilde N^{-1} \tilde d$$
+
+These operations can be computed programatically like so
+
+```python
+def match_filt(data,template,ker):
+    """
+    data : 1d array, already windowed data (d)
+    template : 1d array (A)
+    ker is the smoothing kernel
+    """
+    assert len(data)==len(template),"data must be same shape as template"
+    psd=np.abs(rfft(data))**2 # stationary noise model
+    psd=np.convolve(psd,ker,'same') # smooth the psd
+    # Perform correlation inversly weighted by psd
+    amplitude_ft=np.conj(rfft(template))*rfft(data)/psd
+    return irfft(amplitude_ft)
+```
+
+Now we apply the matched filter to our strain arrays and plot the output. 
+
+```python
+# Load templates into variables
+template_h,template_l=read_template(pathjoin(root,events[e]['fn_template']))
+# Perform matched filter
+matched_h = match_filt(strain_h,template_h,psd_h)
+# Plots (ommited)
+```
+
+NB: `strain_h` is windowed, and the 'tukey' window is used in below plots. 
+
+
+
+
+
 
 **(c)**
 *Estimate a noise for each event and from the output of the matched filter, give a signal-to-noise ratio for each event, both from the individual detectors, and from the combined Livingston + Hanford events.* 
