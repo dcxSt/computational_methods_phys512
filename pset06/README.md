@@ -234,6 +234,10 @@ for e in events:
 ```
 
 
+![p5_smoothed_psd_GW150914](https://user-images.githubusercontent.com/21654151/201243063-148ea270-86ec-43e4-b803-28578379aa3d.png)
+![p5_smoothed_psd_GW151226](https://user-images.githubusercontent.com/21654151/201243064-d7ca5087-35d4-4fe4-93ba-d46cbc65e570.png)
+![p5_smoothed_psd_GW170104](https://user-images.githubusercontent.com/21654151/201243067-f9702923-3875-47a4-a034-91efe8d7aa9e.png)
+![p5_smoothed_psd_LVT151012](https://user-images.githubusercontent.com/21654151/201243068-e0a42cf1-fbdf-4d68-a656-b68c1a25e68e.png)
 
 
 **(b)**
