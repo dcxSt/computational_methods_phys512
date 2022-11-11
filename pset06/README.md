@@ -271,10 +271,11 @@ matched_h = match_filt(strain_h,template_h,psd_h)
 NB: `strain_h` is windowed, and the `tukey` window is used in below plots. 
 
 
-![p5_matched_filter_GW150914](https://user-images.githubusercontent.com/21654151/201256238-13059f72-6fd7-4285-944d-538dc9493239.png)
-![p5_matched_filter_GW151226](https://user-images.githubusercontent.com/21654151/201256239-86c007d1-8169-488e-81e1-990e50912595.png)
-![p5_matched_filter_GW170104](https://user-images.githubusercontent.com/21654151/201256240-a29a6c18-e4e9-426b-a2d0-2407933dfcf2.png)
-![p5_matched_filter_LVT151012](https://user-images.githubusercontent.com/21654151/201256242-e88882f5-98f3-4f44-bd6e-ff1b8d3db1a5.png)
+![p5_matched_filter_GW150914](https://user-images.githubusercontent.com/21654151/201256531-094d81a5-36e3-4f85-83ae-d79bb28c20b8.png)
+![p5_matched_filter_GW151226](https://user-images.githubusercontent.com/21654151/201256532-fcec8e48-8c32-4f18-a832-c718c9b381c6.png)
+![p5_matched_filter_GW170104](https://user-images.githubusercontent.com/21654151/201256535-381e1d90-430e-43e5-b474-501df67f3ec0.png)
+![p5_matched_filter_LVT151012](https://user-images.githubusercontent.com/21654151/201256536-b210a16d-8d34-4f11-b629-ddacf0162283.png)
+
 
 
 
