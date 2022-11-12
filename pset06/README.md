@@ -148,6 +148,7 @@ windowed_fft_x = X/2-np.roll(X/4,1)-np.roll(X/4,-1)
 
 
 ## 5)
+Code for this question is in jupyter notebook `p5.ipynb`
 
 *Match Filter of LIGO data. We are going to find gravitational waves! Key will be getting LIGO data from github: [https://github.com/losc-tutorial/LOSC_Event_tutorial](https://github.com/losc-tutorial/LOSC_Event_tutorial).*
 
@@ -244,28 +245,24 @@ $$f \equiv (N^{-1}A(t-\tau))^Td \Rightarrow \tilde f = \tilde A^\ast \tilde N^{-
 These operations can be computed programatically like so
 
 ```python
-def match_filt(data,template,ker):
-    """
-    data : 1d array, already windowed data (d)
-    template : 1d array (A)
-    ker is the smoothing kernel
-    """
-    assert len(data)==len(template),"data must be same shape as template"
-    psd=np.abs(rfft(data))**2 # stationary noise model
-    psd=np.convolve(psd,ker,'same') # smooth the psd
-    # Perform correlation inversly weighted by psd
-    amplitude_ft=np.conj(rfft(template))*rfft(data)/psd
-    return irfft(amplitude_ft)
-```
-
-Now we apply the matched filter to our strain arrays and plot the output. 
-
-```python
 # Load templates into variables
-template_h,template_l=read_template(pathjoin(root,events[e]['fn_template']))
-# Perform matched filter
-matched_h = match_filt(strain_h,template_h,psd_h)
-# Plots (ommited)
+tp,tx = read_template(pathjoin(root,events[e]['fn_template']))
+tp_win = tp*window(len(tp)) # Window template, we only use tp, not tx
+tp_psd = np.abs(rfft(tp_win)**2) # Get PSD of template
+
+# Noise models
+ninv_h = 1/smooth(psd_h) # hanford N inv
+ninv_l = 1/smooth(psd_l) # Livingston N inv
+
+# Whiten the strains and template
+sftwhite_h = sqrt(ninv_h)*rfft(strain_h) # whitend hanford strain FT
+sftwhite_l = sqrt(ninv_l)*rfft(strain_l) # whitend livingston strain FT
+tpftwhite_h = sqrt(ninv_h)*rfft(tp*window(len(tp)))# template whitned with Hanford noise model
+tpftwhite_l = sqrt(ninv_l)*rfft(tp*window(len(tp)))# template whitned with Livingston noise model
+
+# Matched filters
+mh = irfft(np.conj(tpftwhite_h) * sftwhite_h) # Hanford matched filter
+ml = irfft(np.conj(tpftwhite_l) * sftwhite_l) # Livingston matched filter
 ```
 
 NB: `strain_h` is windowed, and the `tukey` window is used in below plots. 
@@ -278,14 +275,68 @@ NB: `strain_h` is windowed, and the `tukey` window is used in below plots.
 
 
 
-
-
 **(c)**
 *Estimate a noise for each event and from the output of the matched filter, give a signal-to-noise ratio for each event, both from the individual detectors, and from the combined Livingston + Hanford events.* 
 
-**(d)**
-*Compare the signal-to-noise you get from the scatter int he matched filter to the analytic signal-to-noise you expect from your noise model. How close are they? If they disagree, can you explain why?*
+The variance is
 
+$$\langle\delta_m\delta_m^T\rangle = (A^TN^{-1}A)^{-1}$$
+
+In our case, $m$ is a scalar and so is $\delta_m$. We can use the fact that the noise is stationary so fourier transforms will cast $N$ into a diagonal form
+
+$$\text{Var}(m) = ((FA)^\dag(FNF^\dag)^{-1}(FA))^{-1}$$
+
+The signal to noise ratio is $P_{s}/P_{n}$, the power of the signal divided by the power of the noise, (sometimes it's the square root of that). Our signal is a constant, which we estimate by taking the max of the match filter. Our noise is a random variable, the power is the expected value of $N^2$. 
+
+We can find an analytic expression for what we expect the noise to be based only on our templates and noise model
+
+$$(A^TN^{-1}A)^{-1/2}$$
+
+
+```python
+### (c)
+# Estimate noise analytically
+AtNinvA_h = 2*abs(tpftwhite_h@tpftwhite_h) # factor of 2 from rfft
+AtNinvA_l = 2*abs(tpftwhite_l@tpftwhite_l) # factor of 2 from rfft
+
+# Estimate signal to noise ratio
+snr_anal_h = max(abs(mh))*sqrt(AtNinvA_h) # signal to noise analytic hanford
+snr_anal_l = max(abs(ml))*sqrt(AtNinvA_l) # " Livingston
+snr_esti_h = max(abs(mh))/np.std(mh[:35000]) # std is sq power since mean is zero
+snr_esti_l = max(abs(ml))/np.std(ml[:35000]) # std is sq power since mean is zero
+
+# Display SNR estimates
+print(f"{e}")
+print(f"SNR analitic estimate hanford/livingston={snr_anal_h:.2f}/{snr_anal_l:.2f}")
+print(f"SNR measured estimate hanford/livingston={snr_esti_h:.2f}/{snr_esti_l:.2f}")
+```
+
+The output is dubious for the analytically computed one
+```
+GW150914
+SNR analitic estimate hanford/livingston=134.32/48.99
+SNR measured estimate hanford/livingston=17.39/12.79
+LVT151012
+SNR analitic estimate hanford/livingston=39.70/34.89
+SNR measured estimate hanford/livingston=6.45/5.11
+GW151226
+SNR analitic estimate hanford/livingston=9.54/7.31
+SNR measured estimate hanford/livingston=9.94/6.95
+GW170104
+SNR analitic estimate hanford/livingston=47.50/73.65
+SNR measured estimate hanford/livingston=8.00/9.47
+```
+
+The analytic estimate drastically understimates the noise (but not too drastically, it's not more than one order of magnitude). This is probably because we smoothed those spikes in our noise model, so the analytical formula is underestimating the noise. 
+
+
+
+**(d)**
+*Compare the signal-to-noise you get from the scatter in the matched filter to the analytic signal-to-noise you expect from your noise model. How close are they? If they disagree, can you explain why?*
+
+The curvature is 
+
+$$H = $$
 
 
 
