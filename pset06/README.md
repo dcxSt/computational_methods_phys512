@@ -285,9 +285,11 @@ $$\langle\delta_m\delta_m^T\rangle = (A^TN^{-1}A)^{-1}$$
 
 In our case, $m$ is a scalar and so is $\delta_m$. We can use the fact that the noise is stationary so fourier transforms will cast $N$ into a diagonal form
 
-$$\text{Var}(m) = ((FA)^\dagger(FNF^\dagger)^{-1}(FA))^{-1}$$
+$$\text{Var}(m) = ((FA)^\dagger(FNF^\dagger)^{-1}(FA))^{-1} = (FA/\sqrt{1/PSD})^\dagger (FA/\sqrt{PSD}))^{-1}$$
 
-The signal to noise ratio is $P_{s}/P_{n}$, the power of the signal divided by the power of the noise, (sometimes it's the square root of that). Our signal is a constant, which we estimate by taking the max of the match filter. Our noise is a random variable, the power is the expected value of $N^2$. 
+The rightmost innequality is obtained with the Wiener Kinchen theorem.
+
+The signal to noise ratio is $P_{s}/P_{n}$, the power of the signal divided by the power of the noise, (we use the square root of that). Our signal is a constant, which we estimate by taking the max of the match filter. Our noise is a random variable, the power is the expected value of $N^2$. 
 
 We can find an analytic expression for what we expect the noise to be based only on our templates and noise model
 
@@ -312,6 +314,9 @@ print(f"SNR analitic estimate hanford/livingston={snr_anal_h:.2f}/{snr_anal_l:.2
 print(f"SNR measured estimate hanford/livingston={snr_esti_h:.2f}/{snr_esti_l:.2f}")
 ```
 
+**(d)**
+*Compare the signal-to-noise you get from the scatter in the matched filter to the analytic signal-to-noise you expect from your noise model. How close are they? If they disagree, can you explain why?*
+
 The output is dubious for the analytically computed one
 ```
 GW150914
@@ -328,16 +333,11 @@ SNR analitic estimate hanford/livingston=47.50/73.65
 SNR measured estimate hanford/livingston=8.00/9.47
 ```
 
+
 The analytic estimate drastically understimates the noise (but not too drastically, it's not more than one order of magnitude). This is probably because we smoothed those spikes in our noise model, so the analytical formula is underestimating the noise. 
 
 
 
-**(d)**
-*Compare the signal-to-noise you get from the scatter in the matched filter to the analytic signal-to-noise you expect from your noise model. How close are they? If they disagree, can you explain why?*
-
-The curvature is 
-
-$$H = $$
 
 
 
@@ -346,6 +346,8 @@ $$H = $$
 
 
 
+
+MSG to grader. I'm still working on this part...
 
 
 
