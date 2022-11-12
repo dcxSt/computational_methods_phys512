@@ -268,10 +268,11 @@ ml = irfft(np.conj(tpftwhite_l) * sftwhite_l) # Livingston matched filter
 NB: `strain_h` is windowed, and the `tukey` window is used in below plots. 
 
 
-![p5_matched_filter_GW150914](https://user-images.githubusercontent.com/21654151/201256531-094d81a5-36e3-4f85-83ae-d79bb28c20b8.png)
-![p5_matched_filter_GW151226](https://user-images.githubusercontent.com/21654151/201256532-fcec8e48-8c32-4f18-a832-c718c9b381c6.png)
-![p5_matched_filter_GW170104](https://user-images.githubusercontent.com/21654151/201256535-381e1d90-430e-43e5-b474-501df67f3ec0.png)
-![p5_matched_filter_LVT151012](https://user-images.githubusercontent.com/21654151/201256536-b210a16d-8d34-4f11-b629-ddacf0162283.png)
+![p5_matched_filter_GW150914](https://user-images.githubusercontent.com/21654151/201450016-ce54c581-7a3f-470a-badc-4b4b094d44ef.png)
+![p5_matched_filter_GW151226](https://user-images.githubusercontent.com/21654151/201450018-1778adfb-7da7-4509-a438-7816ec7473c5.png)
+![p5_matched_filter_GW170104](https://user-images.githubusercontent.com/21654151/201450021-378e1df3-c121-4e5a-a493-399903dae6f5.png)
+![p5_matched_filter_LVT151012](https://user-images.githubusercontent.com/21654151/201450024-9aa5ffba-1424-4ef6-9957-9b1c93726bdd.png)
+
 
 
 
