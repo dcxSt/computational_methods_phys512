@@ -285,7 +285,7 @@ $$\langle\delta_m\delta_m^T\rangle = (A^TN^{-1}A)^{-1}$$
 
 In our case, $m$ is a scalar and so is $\delta_m$. We can use the fact that the noise is stationary so fourier transforms will cast $N$ into a diagonal form
 
-$$\text{Var}(m) = ((FA)^\dag(FNF^\dag)^{-1}(FA))^{-1}$$
+$$\text{Var}(m) = ((FA)^\dagger(FNF^\dagger)^{-1}(FA))^{-1}$$
 
 The signal to noise ratio is $P_{s}/P_{n}$, the power of the signal divided by the power of the noise, (sometimes it's the square root of that). Our signal is a constant, which we estimate by taking the max of the match filter. Our noise is a random variable, the power is the expected value of $N^2$. 
 
