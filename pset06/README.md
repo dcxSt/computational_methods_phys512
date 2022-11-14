@@ -389,6 +389,8 @@ When $\theta\approx 0$, we need a second order taylor expansion, and we get
 
 $$\Delta \theta \approx \begin{cases}\frac{\Delta T}{10ms\cdot \sin\theta},\qquad\text{when $\sin\theta$ is not zero}\\ \sqrt{\frac{2\Delta T}{10ms}},\qquad\text{when $\theta\approx 0$}\end{cases}$$
 
+Roughly speaking, the positional uncertainty will be about $\Delta \theta\approx \Delta T/10ms$. We estimate our $\Delta T$ by the half-width of the region for which the signal to noise ratio is within one of the peak. Typically these are about $\Delta T=0.5ms$, so $\Delta \theta\approx 0.05$radians. (However, it is much worse in LVT151012 where $\Delta T$ is larger and $\theta\approx\pi/2$)
+
 
 
 ![arrival_times_GW150914](https://user-images.githubusercontent.com/21654151/201739665-2a273a25-5d1a-47fb-9d91-40565cd6958e.png)
