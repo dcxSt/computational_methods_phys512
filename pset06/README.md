@@ -381,15 +381,8 @@ Above, $\theta$ is the angle that the line comming from the source makes with th
 
 $$$$
 
-
-
-
-![arrival_times_GW150914](https://user-images.githubusercontent.com/21654151/201739221-30ab047d-9315-48fc-89ce-bc476d9c50b0.png)
-![arrival_times_GW151226](https://user-images.githubusercontent.com/21654151/201739223-a49cb086-72ea-41e3-a9a5-d3b9a308cae0.png)
-![arrival_times_GW170104](https://user-images.githubusercontent.com/21654151/201739224-85eeb0e2-2b8d-42c5-9693-5c0027636ffc.png)
-![arrival_times_LVT151012](https://user-images.githubusercontent.com/21654151/201739225-80e1b9e3-8ec2-4b97-a79c-38a5a2dd9ea1.png)
-
-
-
-
+![arrival_times_GW150914](https://user-images.githubusercontent.com/21654151/201739665-2a273a25-5d1a-47fb-9d91-40565cd6958e.png)
+![arrival_times_GW151226](https://user-images.githubusercontent.com/21654151/201739667-e4702a40-af2c-4750-88fa-1755a479cf55.png)
+![arrival_times_GW170104](https://user-images.githubusercontent.com/21654151/201739668-007a73f3-9285-420b-82ec-b8d6cc0e5893.png)
+![arrival_times_LVT151012](https://user-images.githubusercontent.com/21654151/201739670-5af2120a-107b-4d95-b760-f1e190f09ad6.png)
 
