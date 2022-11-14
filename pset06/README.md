@@ -359,13 +359,16 @@ tpwhite_cum = np.cumsum(abs(tpftwhite))/sum(abs(tpftwhite))
 freqhalf = freqs[np.argwhere(tpwhite_cum>0.5).min()]
 ```
 
-Generlly, these frequencies deviate by one sig fig, between Hanford and Livingston. 
+With one exception, these frequencies agree to about one sig fig between the Hanford and Livingston detectors. 
 
 
+![p5_cumulativeGW150914](https://user-images.githubusercontent.com/21654151/201718830-087d9889-7d3d-478a-879f-fcb90233739e.png)
+![p5_cumulativeGW151226](https://user-images.githubusercontent.com/21654151/201718831-f469127f-f5c6-4961-8096-696d25b943ed.png)
+![p5_cumulativeGW170104](https://user-images.githubusercontent.com/21654151/201718833-b97d40d6-f2a4-43de-861c-d60ab3d55f41.png)
+![p5_cumulativeLVT151012](https://user-images.githubusercontent.com/21654151/201718834-56c956ab-ae8b-4a1f-8c64-96cafc59b8b2.png)
 
 
-
-
+**(f)**
 
 
 
