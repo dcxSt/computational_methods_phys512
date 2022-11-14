@@ -389,12 +389,11 @@ When $\theta\approx 0$, we need a second order taylor expansion, and we get
 
 $$\Delta \theta \approx \begin{cases}\frac{\Delta T}{10ms\cdot \sin\theta},\qquad\text{when $\sin\theta$ is not zero}\\ \sqrt{\frac{2\Delta T}{10ms}},\qquad\text{when $\theta\approx 0$}\end{cases}$$
 
-Roughly speaking, the positional uncertainty will be about $\Delta \theta\approx \Delta T/10ms$. We estimate our $\Delta T$ by the half-width of the region for which the signal to noise ratio is within one of the peak. Typically these are about $\Delta T=0.5ms$, so $\Delta \theta\approx 0.05$radians. (However, it is much worse in LVT151012 where $\Delta T$ is larger and $\theta\approx\pi/2$)
+Roughly speaking, the positional uncertainty will be about $\Delta \theta\approx \Delta T/10ms$. We estimate our $\Delta T$ by the half-width of the region for which the signal to noise ratio is within one of the peak. Typically these are about $\Delta T=0.5ms$, so $\Delta \theta\approx 0.05$ radians. (However, it is much worse in LVT151012 where $\Delta T$ is larger and $\theta\approx\pi/2$)
 
 
-
-![arrival_times_GW150914](https://user-images.githubusercontent.com/21654151/201739665-2a273a25-5d1a-47fb-9d91-40565cd6958e.png)
-![arrival_times_GW151226](https://user-images.githubusercontent.com/21654151/201739667-e4702a40-af2c-4750-88fa-1755a479cf55.png)
-![arrival_times_GW170104](https://user-images.githubusercontent.com/21654151/201739668-007a73f3-9285-420b-82ec-b8d6cc0e5893.png)
-![arrival_times_LVT151012](https://user-images.githubusercontent.com/21654151/201739670-5af2120a-107b-4d95-b760-f1e190f09ad6.png)
+![arrival_times_GW150914](https://user-images.githubusercontent.com/21654151/201743040-7cb948d9-3626-48f6-9f6f-54fa6b355487.png)
+![arrival_times_GW151226](https://user-images.githubusercontent.com/21654151/201743045-65fba4b0-f72e-4ac6-ac4c-67a8e7e534a4.png)
+![arrival_times_GW170104](https://user-images.githubusercontent.com/21654151/201743047-b11e8656-115c-4acd-8128-60bf14d4e8eb.png)
+![arrival_times_LVT151012](https://user-images.githubusercontent.com/21654151/201743049-9d391aa4-f55d-4ab4-8909-d3ca9a03dcfa.png)
 
