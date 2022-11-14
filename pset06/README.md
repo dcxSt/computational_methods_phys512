@@ -375,7 +375,7 @@ With one exception, these frequencies agree to about one sig fig between the Han
 
 Graviational travel at the speed of light $c\approx 3\cdot 10^8m/s$. Lets say that the detectors are 3000 km appart. It takes light $10^{-2}$ seconds, or 10 ms to travel that distance. If the egent happens on the plane, which is the perpendicular bisector to the line that joins the detectors, the signal will arrive at the same time to each detector. With this image, we can deduce that the angle of arival is determined by this equation
 
-$$T = L\cos\theta / c \approx 10ms \cos\theta \Rightarrow \theta = \acos\frac{T}{10ms}$$
+$$T = L\cos\theta / c \approx 10ms \cos\theta \Rightarrow \theta = \arccos\frac{T}{10ms}$$
 
 Above, $\theta$ is the angle that the line comming from the source makes with the line that joins Livingston and Hanford. If our error in $T$ is $\Delta T$, we can approximate the error in $\theta$ by taking derivatives
 
@@ -384,6 +384,10 @@ $$$$
 
 
 
+![arrival_times_GW150914](https://user-images.githubusercontent.com/21654151/201739221-30ab047d-9315-48fc-89ce-bc476d9c50b0.png)
+![arrival_times_GW151226](https://user-images.githubusercontent.com/21654151/201739223-a49cb086-72ea-41e3-a9a5-d3b9a308cae0.png)
+![arrival_times_GW170104](https://user-images.githubusercontent.com/21654151/201739224-85eeb0e2-2b8d-42c5-9693-5c0027636ffc.png)
+![arrival_times_LVT151012](https://user-images.githubusercontent.com/21654151/201739225-80e1b9e3-8ec2-4b97-a79c-38a5a2dd9ea1.png)
 
 
 
