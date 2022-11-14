@@ -369,6 +369,17 @@ With one exception, these frequencies agree to about one sig fig between the Han
 
 
 **(f)**
+*How well can you localize the time of arrival (the Horizontal shoft of your matched filter). The positions of gravitational wave events are infered by comaring their arrival times at different detectors. What is the typical positional uncertainty you might expect given that the detectors are a few thousand km apart?*
+
+
+
+Graviational travel at the speed of light $c\approx 3\cdot 10^8m/s$. Lets say that the detectors are 3000 km appart. It takes light $10^{-2}$ seconds, or 10 ms to travel that distance. If the egent happens on the plane, which is the perpendicular bisector to the line that joins the detectors, the signal will arrive at the same time to each detector. With this image, we can deduce that the angle of arival is determined by this equation
+
+$$T = L\cos\theta / c \approx 10ms \cos\theta \Rightarrow \theta = \acos\frac{T}{10ms}$$
+
+Above, $\theta$ is the angle that the line comming from the source makes with the line that joins Livingston and Hanford. If our error in $T$ is $\Delta T$, we can approximate the error in $\theta$ by taking derivatives
+
+$$$$
 
 
 
