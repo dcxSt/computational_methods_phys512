@@ -336,6 +336,30 @@ SNR measured estimate hanford/livingston=8.00/9.47
 
 The analytic estimate drastically understimates the noise (but not too drastically, it's not more than one order of magnitude). This is probably because we smoothed those spikes in our noise model, so the analytical formula is underestimating the noise. 
 
+Perhaps we should put more effort into a noise model. To deal with noise spikes, we might use a peak detection algorithm, then fit a skinny gaussian to each peak, and then add those to a smoothened signal without the spikes. 
+
+
+**(e)**
+*From the template and noise model, find the frequency from each event where half the weight comes from above that frequency and half below.*
+
+To callibrate data points with frequency, we define a frequency array
+
+```python
+sr = 1/dt # sample rate
+nyquist = sr/2
+freq = np.linspace(0,nyquist,len(strain)//2+1) # //2+1 to account for rfft
+```
+
+Then we take the absoulte rFFT of the whitened template and find the 0.5 crossing point.
+
+```python
+# The normalized cumulative frequency weight
+tpwhite_cum = np.cumsum(abs(tpftwhite))/sum(abs(tpftwhite))
+# The 0.5 crossing
+freqhalf = freqs[np.argwhere(tpwhite_cum>0.5).min()]
+```
+
+Generlly, these frequencies deviate by one sig fig, between Hanford and Livingston. 
 
 
 
@@ -346,8 +370,6 @@ The analytic estimate drastically understimates the noise (but not too drastical
 
 
 
-
-MSG to grader. I'm still working on this part...
 
 
 
