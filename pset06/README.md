@@ -377,9 +377,19 @@ Graviational travel at the speed of light $c\approx 3\cdot 10^8m/s$. Lets say th
 
 $$T = L\cos\theta / c \approx 10ms \cos\theta \Rightarrow \theta = \arccos\frac{T}{10ms}$$
 
-Above, $\theta$ is the angle that the line comming from the source makes with the line that joins Livingston and Hanford. If our error in $T$ is $\Delta T$, we can approximate the error in $\theta$ by taking derivatives
+Above, $\theta$ is the angle that the line comming from the source makes with the line that joins Livingston and Hanford. If our error in $T$ is $\Delta T$, we can approximate the error in $\theta$ by taylor expanding
 
-$$$$
+$$\cos(\theta\pm\Delta\theta) \approx \cos\theta \mp\Delta\theta\sin\theta \approx (T\pm\Delta T)/10ms$$
+
+Canceling $\cos\theta=T/10ms$ we get
+
+$$\Delta \theta \approx \Delta T / (10ms \cdot \sin\theta)$$
+
+When $\theta\approx 0$, we need a second order taylor expansion, and we get
+
+$$\Delta \theta \approx \begin{cases}\frac{\Delta T}{10ms\cdot \sin\theta},\qquad\text{when $\sin\theta$ is not zero}\\ \sqrt{\frac{2\Delta T}{10ms}},\qquad\text{when $\theta\approx 0$}\end{cases}$$
+
+
 
 ![arrival_times_GW150914](https://user-images.githubusercontent.com/21654151/201739665-2a273a25-5d1a-47fb-9d91-40565cd6958e.png)
 ![arrival_times_GW151226](https://user-images.githubusercontent.com/21654151/201739667-e4702a40-af2c-4750-88fa-1755a479cf55.png)
