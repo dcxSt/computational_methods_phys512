@@ -3,9 +3,9 @@
 ## 1)
 *Code can be found in* `PRNG.ipynb`
 
-We make a 3d plot of the c-lib's generated random numbers and rotate it until the stacked planes pattern emerges
+We make a 3d plot of the c-lib's generated random numbers and rotate it until the stacked-planes pattern emerges
 
-TODO: IMG HERE
+<img width="481" alt="p1_dots" src="https://user-images.githubusercontent.com/21654151/202530204-854430b9-8824-404f-907c-57a5371335e7.png">
 
 We can also see some slightly suspect spikes in the PSD of an estimate of the density function
 
@@ -41,7 +41,8 @@ for ix,i in enumerate(x):
             rho[ix,jx,kx]=get_rhoxyz(rp,i,j,k,dx,dy,dz)
 ```
 
-TODO: IMG HERE
+![rho_spec](https://user-images.githubusercontent.com/21654151/202530299-f272e7c8-c6d2-4679-a70c-50e0081b6dbe.png)
+
 
 Python's random number generator does not exhibit this behaviour. (though this is hardly a rigorous proof that the pseudo random number generator exhibits the pseudo random properties we would like it to). 
 
@@ -54,7 +55,8 @@ x,y,z=rp[:truncate,0],rp[:truncate,1],rp[:truncate,2]
 # plot xyz and rotate, see that it's homogenously uniform random
 ```
 
-TODO: IMG HERE
+<img width="325" alt="p1_python_noplane" src="https://user-images.githubusercontent.com/21654151/202530399-192b4fca-91df-4b89-85a4-3db0d4c35644.png">
+
 
 We run this c/python snippet that wraps our favourite faulty c-PRNG. It works, and the image is the same as the one above. (see `rand_points_steve.txt`)
 
@@ -83,7 +85,8 @@ def get_rands(n):
   return vec
 ```
 
-IMG HERE
+## 2)
+
 
 
 
