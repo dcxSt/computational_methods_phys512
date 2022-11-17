@@ -87,6 +87,69 @@ def get_rands(n):
 
 ## 2)
 
+*Write a rejection method to generate exponential deviates from another distribution. Which of Lorentzians, Gaussians, and power laws could you use for the bounding distribution.*
+
+Asymtotically lorentzians go like $1/x^2$, so they can bound exponentials from above. Gaussians go like $\exp(-x^2)$, so asymptotically $\lim_{x\to\infty}e^{-x}/e^{-x^2}\to e^x$, so the gaussian will eventually dip below the exponential, so we can't use a gaussian. We could use any power law too, because exponentials die faster than polynomials. 
+
+So lets use a power law. We can sample from our power law by inverting the CDF. If the PDF is proportional to $s^{-\alpha}$, where $s$ ranges from 1 to infinity, then the (properly normalized!) CDF is $s^{1-\alpha}$. 
+
+```python
+def sample_power_law(n,alpha):
+   # Samples from s^-alpha
+   y=np.random.rand(n)
+   # power law transformation
+   x=y**(1/(1-alpha))# inverse CDF
+   return x
+```
+
+PLOT of bins and powerlaw
+
+We can use $\alpha=2$ to bound $e^{-x}$. 
+
+PLOT 
+
+Now we implement a rejection algorithm. Lets trunkate at $s=10$. 
+
+```python
+def sample_reject(g,f,sample_f,n:int):
+    """
+    Sample n from f's dist (sample_f). Compute random height,
+    accept those that land under the g curve.
+    """
+    # sample f 
+    f_samp=sample_f(n)
+    # reject some of these
+    y_samp=np.random.rand(len(f_samp))*f(f_samp)
+    g_select=f_samp[np.where(y_samp<=g(f_samp))]
+    g_reject=f_samp[np.where(y_samp> g(f_samp))]
+    return g_select,g_reject,y_samp
+```
+
+Here is how the sampleing is done. 
+
+PLOTS OF SAMPLINg
+
+There are two ways we can make that blue region skinnier. We can change $\alpha$ or we can divide by some factor $\beta$. In math, this reads
+
+$$
+\inf_{\alpha,\beta} \int_1^\infty s^{-\alpha}/\beta - e^{-s} ds \quad\bigg|\quad
+s^{-\alpha}/\beta \geq e^{-s}\,\,\forall s\in [1,\infty)
+$$
+
+This problem is non-trivial. So we do some trial and error and get it to look skinnier. Here's one that doesn't look so bad:
+
+PLOT
+
+
+
+
+
+
+
+
+
+
+
 
 
 
