@@ -1,8 +1,9 @@
 # Pseudo Random Number Generators
 
 ## 1)
+*Code can be found in* `PRNG.ipynb`
 
-We make a 3d plot of the text file and rotate it until a the stacked planes patter emerges
+We make a 3d plot of the c-lib's generated random numbers and rotate it until the stacked planes pattern emerges
 
 TODO: IMG HERE
 
@@ -44,11 +45,18 @@ TODO: IMG HERE
 
 Python's random number generator does not exhibit this behaviour. (though this is hardly a rigorous proof that the pseudo random number generator exhibits the pseudo random properties we would like it to). 
 
-CODE HERE
+```python
+n=300000000
+vec=np.random.rand(3*n)
+rp=vec.reshape((n,3))
+truncate=10000
+x,y,z=rp[:truncate,0],rp[:truncate,1],rp[:truncate,2]
+# plot xyz and rotate, see that it's homogenously uniform random
+```
 
 TODO: IMG HERE
 
-We run this c/python snippet that wraps our favourite faulty c-PRNG
+We run this c/python snippet that wraps our favourite faulty c-PRNG. It works, and the image is the same as the one above. (see `rand_points_steve.txt`)
 
 ```python
 import numpy as np
