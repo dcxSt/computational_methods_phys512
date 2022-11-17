@@ -7,7 +7,7 @@ We make a 3d plot of the c-lib's generated random numbers and rotate it until th
 
 <img width="481" alt="p1_dots" src="https://user-images.githubusercontent.com/21654151/202530204-854430b9-8824-404f-907c-57a5371335e7.png">
 
-We can also see some slightly suspect spikes in the PSD of an estimate of the density function
+We can also see some slightly suspect spikes in the PSD of an estimate of the density function. However, there should be modes at higher frequencies... Maybe it's aliasing? Not enough data here, but thought I'd stick it in for interest reasons. Need to optimize code and get a better estimate. 
 
 ```python
 # Estimate density function in this triple for loop (NB: unoptimized)
@@ -144,8 +144,6 @@ This problem is non-trivial. So we do some trial and error and get it to look sk
 
 ![p2_accepted_rejected_skinny](https://user-images.githubusercontent.com/21654151/202577789-0d5e98ce-19bf-4e90-b0bb-dab941ed3a48.png)
 
-
-![p2_hist_skinny](https://user-images.githubusercontent.com/21654151/202577796-c3b94395-5239-4a00-9e52-68b3b411dab5.png)
 
 
 
