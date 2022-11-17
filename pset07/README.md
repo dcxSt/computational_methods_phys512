@@ -102,11 +102,12 @@ def sample_power_law(n,alpha):
    return x
 ```
 
-PLOT of bins and powerlaw
+![p2_plaw](https://user-images.githubusercontent.com/21654151/202577614-363bfe0c-ea46-436a-be39-cf63bec9928d.png)
+
 
 We can use $\alpha=2$ to bound $e^{-x}$. 
 
-PLOT 
+![p2_powerlaw_bound_exp](https://user-images.githubusercontent.com/21654151/202577683-d36d8665-85ad-48c6-a02b-371b8fc9c6a9.png)
 
 Now we implement a rejection algorithm. Lets trunkate at $s=10$. 
 
@@ -127,9 +128,11 @@ def sample_reject(g,f,sample_f,n:int):
 
 Here is how the sampleing is done. 
 
-PLOTS OF SAMPLINg
+![p2_accepted_rejected](https://user-images.githubusercontent.com/21654151/202577723-6c093d3a-4d0e-4bf5-baaf-7ef89d409055.png)
 
-There are two ways we can make that blue region skinnier. We can change $\alpha$ or we can divide by some factor $\beta$. In math, this reads
+![p2_hist](https://user-images.githubusercontent.com/21654151/202577738-49e37b2c-ebfb-41c9-88b1-e6b71060e26c.png)
+
+There are two ways we can make that blue region (rejects) skinnier. We can change $\alpha$ or we can divide by some factor $\beta$. In math, this reads
 
 $$
 \inf_{\alpha,\beta} \int_1^\infty s^{-\alpha}/\beta - e^{-s} ds \quad\bigg|\quad
@@ -138,9 +141,11 @@ $$
 
 This problem is non-trivial. So we do some trial and error and get it to look skinnier. Here's one that doesn't look so bad:
 
-PLOT
+
+![p2_accepted_rejected_skinny](https://user-images.githubusercontent.com/21654151/202577789-0d5e98ce-19bf-4e90-b0bb-dab941ed3a48.png)
 
 
+![p2_hist_skinny](https://user-images.githubusercontent.com/21654151/202577796-c3b94395-5239-4a00-9e52-68b3b411dab5.png)
 
 
 
