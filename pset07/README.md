@@ -148,7 +148,7 @@ This problem is non-trivial. So we do some trial and error and get it to look sk
 
 
 ## 3)
-*Ratio of uniforms sampler.*
+*Ratio of uniforms sampler. See code in* `p3.py`
 
 Solving for $v$, we see that the $u$ must satisfy
 
@@ -156,7 +156,10 @@ $$
 0<u<\sqrt(p(v/u)) \Rightarrow v<-2u\ln(u) \quad u\in (0,1)
 $$
 
-PLOT
+
+(Analytically computed bounding region)
+
+![p3_rou_acceptance_region](https://user-images.githubusercontent.com/21654151/202617964-f1fcb656-1e22-4a9e-b7ce-b73cffeb379d.png)
 
 There is only one optimum in $u\in(0,1)$ and that's the maximum. We can find it by taking a derivative.
 
@@ -187,6 +190,11 @@ def sample_exp(n:int):
 ```
 
 
+For one set of samples, the accepted/rejected values of $u$ and $v$ will look like
 
+![p3_sample_droplet](https://user-images.githubusercontent.com/21654151/202618048-d610d712-02f1-4a83-8006-c195fb8604ed.png)
+
+Indeed our samples generate the correct distribution, as can be seenin this plot of the exponential. 
+![p2_plaw](https://user-images.githubusercontent.com/21654151/202618174-9e684f42-8024-49d9-b52a-f64f96ff8bea.png)
 
 
