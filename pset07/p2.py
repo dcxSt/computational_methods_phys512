@@ -42,19 +42,19 @@ def rejection_method(g,f,sample_f,n):
 import matplotlib.pyplot as plt
 alpha=2
 n=50000
-#x=sample_power_law(n,alpha)
-#x=x[np.where(x<30)]# throw out tail
-#plt.figure(figsize=(6,6))
-#plt.clf()
-#plt.hist(x,bins=50,density=True,label="data from transformed random number generator")
-#plt.plot(np.linspace(1,30,50),np.linspace(1,30,50)**(-alpha),label="Power law function")
-#plt.legend()
-#plt.title("Power law")
-#plt.xlabel("s")
-#plt.ylabel("Relative Density")
-#plt.yticks([])
-#plt.savefig("img/p2_plaw.png",dpi=450)
-#plt.show(block=True)
+x=sample_power_law(n,alpha)
+x=x[np.where(x<30)]# throw out tail
+plt.figure(figsize=(6,6))
+plt.clf()
+plt.hist(x,bins=50,density=True,label="data from transformed random number generator")
+plt.plot(np.linspace(1,30,50),np.linspace(1,30,50)**(-alpha),label="Power law function")
+plt.legend()
+plt.title("Power law")
+plt.xlabel("s")
+plt.ylabel("Relative Density")
+plt.yticks([])
+plt.savefig("img/p2_plaw.png",dpi=450)
+plt.show(block=True)
 
 
 arrin=np.linspace(1,100,500)

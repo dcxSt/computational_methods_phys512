@@ -87,6 +87,8 @@ def get_rands(n):
 
 ## 2)
 
+*Code in* `p2.py`
+
 *Write a rejection method to generate exponential deviates from another distribution. Which of Lorentzians, Gaussians, and power laws could you use for the bounding distribution.*
 
 Asymtotically lorentzians go like $1/x^2$, so they can bound exponentials from above. Gaussians go like $\exp(-x^2)$, so asymptotically $\lim_{x\to\infty}e^{-x}/e^{-x^2}\to e^x$, so the gaussian will eventually dip below the exponential, so we can't use a gaussian. We could use any power law too, because exponentials die faster than polynomials. 
@@ -145,12 +147,44 @@ This problem is non-trivial. So we do some trial and error and get it to look sk
 ![p2_accepted_rejected_skinny](https://user-images.githubusercontent.com/21654151/202577789-0d5e98ce-19bf-4e90-b0bb-dab941ed3a48.png)
 
 
+## 3)
+*Ratio of uniforms sampler.*
 
+Solving for $v$, we see that the $u$ must satisfy
 
+$$
+0<u<\sqrt(p(v/u)) \Rightarrow v<-2u\ln(u) \quad u\in (0,1)
+$$
 
+PLOT
 
+There is only one optimum in $u\in(0,1)$ and that's the maximum. We can find it by taking a derivative.
 
+$$
+v_{\text{sup}}(u)=-2u\ln u \rightarrow \frac{dv}{du} = -2\ln u - 2 =0
+$$
 
+solving for u and v we get
+
+$$
+\ln u = -1 \Rightarrow u=e^{-1}\quad v_{\text{sup}}(1/e) = 2/e
+$$
+
+So the area is bounded by the box $(x,y) : x\in[0,1], y\in[0,2/e]$. To use this to sample from 1/x, we generate random points uniformly within this bounding box, and evaluate those that fall in the refion at u/v.
+
+```python
+# The height of the max accepted v
+def droplet(u):
+    return -2*u*np.log(u)
+
+# Use ROU to sample from an exponential distribution
+def sample_exp(n:int):
+    ymax=2/np.exp(1) # Height of accept region
+    x=np.random.rand(n)      # Select random points in
+    y=np.random.rand(n)*ymax # bounding box
+    idxs=np.where(y<droplet(x)) # Accepted indices
+    return y[idxs]/x[idxs] # return accepted values
+```
 
 
 
