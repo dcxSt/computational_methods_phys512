@@ -195,4 +195,13 @@ For one set of samples, the accepted/rejected values of $u$ and $v$ will look li
 Indeed our samples generate the correct distribution, as can be seenin this plot of the exponential. 
 ![p2_plaw](https://user-images.githubusercontent.com/21654151/202618174-9e684f42-8024-49d9-b52a-f64f96ff8bea.png)
 
+To find the efficiency of this approach, we integrate $v_{\text{sup}}$ from 0 to 1 and divide by the total bounding volume. We use integration by parts. 
+
+$$\int_0^1-2u\ln u du = \int_0^1 udu + [-2u^2/2 \ln u]_0^1 = \frac{u^2}{2}\bigg|_0^1 = 1/2$$
+
+Dividing by the bounding volumne we get
+
+$$\text{efficiency } = \frac{1/2}{2/e} = e/4$$
+
+This is between half and three quarters, which makes sense looking at the plots. 
 
