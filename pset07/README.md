@@ -152,9 +152,7 @@ This problem is non-trivial. So we do some trial and error and get it to look sk
 
 Solving for $v$, we see that the $u$ must satisfy
 
-$$
-0<u<\sqrt(p(v/u)) \Rightarrow v<-2u\ln(u) \quad u\in (0,1)
-$$
+$$0< u < \sqrt{p(v/u)} \Rightarrow v < -2u\ln u  \quad u\in (0,1)$$
 
 
 (Analytically computed bounding region)
